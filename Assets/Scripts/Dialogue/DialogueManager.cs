@@ -8,7 +8,6 @@ public class DialogueManager : MonoBehaviour {
 
     public GameObject dialogueBoxPrefab; // Assign a prefab with DialogueBackground and Text (TMP)
     public GameObject choiceButtonPrefab; // Assign a prefab for choice buttons
-
     private List<GameObject> activeDialogueBoxes = new List<GameObject>();
 
     public GameObject CreateDialogueBox() {
@@ -16,7 +15,6 @@ public class DialogueManager : MonoBehaviour {
         activeDialogueBoxes.Add(newDialogueBox);
         return newDialogueBox;
     }
-
     public void DestroyDialogueBox(GameObject dialogueBox) {
         if (activeDialogueBoxes.Contains(dialogueBox)) {
             activeDialogueBoxes.Remove(dialogueBox);
@@ -34,12 +32,6 @@ public class DialogueManager : MonoBehaviour {
             Debug.LogError("TypewriterEffect component not found on dialogueBox.");
         }
     }
-
-    private IEnumerator StartTypingWithDelay(TypewriterEffect typewriterEffect, string text) {
-        yield return new WaitForEndOfFrame(); // Small delay to ensure the game object is active
-        typewriterEffect.StartTyping(text);
-    }
-
     public void ShowChoices(GameObject dialogueBox, List<DialogueChoice> choices) {
         Debug.Log("ShowChoices called");
         Transform choiceContainer = dialogueBox.transform.Find("ChoiceContainer");
@@ -99,5 +91,9 @@ public class DialogueManager : MonoBehaviour {
 
     private TypewriterEffect GetTypewriterEffect(GameObject dialogueBox) {
         return dialogueBox.GetComponentInChildren<TypewriterEffect>();
+    }
+    private IEnumerator StartTypingWithDelay(TypewriterEffect typewriterEffect, string text) {
+        yield return new WaitForEndOfFrame(); // Small delay to ensure the game object is active
+        typewriterEffect.StartTyping(text);
     }
 }

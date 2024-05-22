@@ -18,7 +18,7 @@ public abstract class Dialogue : MonoBehaviour
         typewriterEffect = dialogueBox.GetComponentInChildren<TypewriterEffect>();
     }
 
-    protected virtual void ShowCurrentDialogue() {
+    protected virtual void ShowClickDialogue() {
         if (clickDialogue.dialogueLines.Count > 0 && currentClickDialogueIndex < clickDialogue.dialogueLines.Count) {
             dialogueManager.ShowDialogue(dialogueBox, clickDialogue.dialogueLines[currentClickDialogueIndex]);
             if (currentClickDialogueIndex == clickDialogue.dialogueLines.Count - 1 && clickDialogue.choices.Count > 0) {
@@ -26,7 +26,6 @@ public abstract class Dialogue : MonoBehaviour
             }
         }
     }
-
     protected virtual void ShowProximityDialogue()
     {
         if (proximityDialogue.dialogueLines.Count > 0)
@@ -35,14 +34,7 @@ public abstract class Dialogue : MonoBehaviour
             dialogueManager.ShowDialogue(dialogueBox, proximityDialogue.dialogueLines[index]);
         }
     }
-
-    public void SelectChoice(DialogueChoice choice) {
-        clickDialogue = choice.nextDialogue;
-        currentClickDialogueIndex = 0;
-        ShowCurrentDialogue();
-    }
-
-    public void AdvanceDialogue() {
+    public void AdvanceClickDialogue() {
         if (typewriterEffect.IsTyping()) {
             typewriterEffect.StopTypingAndShowFullText();
         }
@@ -58,10 +50,16 @@ public abstract class Dialogue : MonoBehaviour
                 }
             }
             else {
-                ShowCurrentDialogue();
+                ShowClickDialogue();
             }
         }
     }
+    public void SelectChoice(DialogueChoice choice) {
+        clickDialogue = choice.nextDialogue;
+        currentClickDialogueIndex = 0;
+        ShowClickDialogue();
+    }
+
 
     protected virtual void OnDestroy() {
         if (dialogueBox != null) {

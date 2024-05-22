@@ -22,14 +22,14 @@ MonoBehaviour:
   groundDecelerationTime: 0.5
   airSpeed: 10
   airAccelerationTime: 0.2
-  airDecelerationTime: 1
+  airDecelerationTime: 0.1
   groundJumpHeight: 3
-  jumpDecay: 100
+  jumpDecay: 0
   gravity: 50
-  airJumpHeight: 3
-  maxAirJumps: 1
+  airJumpHeight: 2
+  maxAirJumps: 5
   wallJumpDirection: {x: 1, y: 2}
-  wallJumpForce: 20
+  wallJumpForce: 0
   wallJumpDuration: 0.2
   wallSlideGravityMod: 0
   maxWallSlideSpeed: 2

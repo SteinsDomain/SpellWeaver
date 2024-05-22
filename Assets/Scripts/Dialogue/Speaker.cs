@@ -11,29 +11,68 @@ public class Speaker : Dialogue, IInteractable
 
     void Update()
     {
-        // Handle proximity detection
-        Collider2D[] hitColliders = Physics2D.OverlapCircleAll(transform.position, detectionRadius, playerLayer);
-        playerInRange = hitColliders.Length > 0;
+        CheckForPlayer();
 
         if (playerInRange)
         {
-            if (!dialogueBox.activeSelf)
-            {
-                ShowProximityDialogue();
-                dialogueBox.SetActive(true);
-                isProximityDialogueActive = true;
-            }
-
-            Vector3 dialoguePosition = transform.position + Vector3.up * 1.5f;
-            dialogueBox.transform.position = dialoguePosition;
+            StartTalking();
         }
         else
         {
-            if (dialogueBox.activeSelf)
+            StopTalking();
+        }
+    }
+    private void CheckForPlayer()
+    {
+        Collider2D[] hitColliders = Physics2D.OverlapCircleAll(transform.position, detectionRadius, playerLayer);
+        playerInRange = hitColliders.Length > 0;
+    }
+    private void StartTalking()
+    {
+        if (!dialogueBox.activeSelf)
+        {
+            HandleProximityDialogue();
+        }
+
+        SetDialogueBoxPosition();
+    }
+    private void StopTalking()
+    {
+        if (dialogueBox.activeSelf)
+        {
+            ResetDialogue();
+        }
+    }
+    private void ResetDialogue()
+    {
+        dialogueBox.SetActive(false);
+        isProximityDialogueActive = false;
+        currentClickDialogueIndex = 0;
+    }
+
+    private void SetDialogueBoxPosition()
+    {
+        Vector3 dialoguePosition = transform.position + Vector3.up * 2f;
+        dialogueBox.transform.position = dialoguePosition;
+    }
+    private void HandleProximityDialogue()
+    {
+        ShowProximityDialogue();
+        dialogueBox.SetActive(true);
+        isProximityDialogueActive = true;
+    }
+    private void HandleClickDialogue()
+    {
+        if (clickDialogue.dialogueLines.Count > 0)
+        {
+            if (!dialogueBox.activeSelf)
             {
-                dialogueBox.SetActive(false);
-                isProximityDialogueActive = false;
-                currentClickDialogueIndex = 0;
+                ShowClickDialogue();
+                dialogueBox.SetActive(true);
+            }
+            else
+            {
+                AdvanceClickDialogue();
             }
         }
     }
@@ -44,24 +83,10 @@ public class Speaker : Dialogue, IInteractable
         {
             if (isProximityDialogueActive)
             {
-                // Hide proximity dialogue and reset state
-                dialogueBox.SetActive(false);
-                isProximityDialogueActive = false;
-                currentClickDialogueIndex = 0;
+                ResetDialogue();
             }
 
-            if (clickDialogue.dialogueLines.Count > 0)
-            {
-                if (!dialogueBox.activeSelf)
-                {
-                    ShowCurrentDialogue();
-                    dialogueBox.SetActive(true);
-                }
-                else
-                {
-                    AdvanceDialogue();
-                }
-            }
+            HandleClickDialogue();
         }
     }
 

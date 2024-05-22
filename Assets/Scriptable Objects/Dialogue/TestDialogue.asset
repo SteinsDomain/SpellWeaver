@@ -14,12 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dialogueLines:
   - A
-  - 'The weather is nice today, isn''t it?
-
-
-    A'
-  - 'Stay safe, the roads are dangerous these days.
-
-
-    A'
+  - "The weather is nice today, \nisn't it?"
+  - "Stay safe, \nthe roads are dangerous these days."
   choices: []
