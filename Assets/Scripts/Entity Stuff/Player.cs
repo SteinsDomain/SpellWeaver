@@ -51,7 +51,8 @@ public class Player : MonoBehaviour {
     #endregion
     #region Interaction Variables
     public LayerMask interactableLayer;
-    public float interactRadius = 1.0f; 
+    public float interactRadius = 1.0f;
+    public Transform interactPoint;
     #endregion
 
     void Awake() {
@@ -232,25 +233,17 @@ public class Player : MonoBehaviour {
     }
 
     private void CheckForInteractable() {
-        Collider2D[] hitColliders = Physics2D.OverlapCircleAll(transform.position, interactRadius, interactableLayer);
-        foreach (var hitCollider in hitColliders) {
-            Dialogue dialogue = hitCollider.GetComponent<Dialogue>();
-            if (dialogue != null) {
-                if (dialogue is ClickDialogue clickDialogue) {
-                    clickDialogue.Interact();
-                }
-                else if (dialogue is ProximityDialogue) {
-                    // Optional: Handle ProximityDialogue differently if needed
-                    //for now, proximity dialogue cant be clicked
-                }
-                break;
+        Collider2D[] hitColliders = Physics2D.OverlapCircleAll(interactPoint.position, interactRadius, interactableLayer);
+        foreach (Collider2D hitCollider in hitColliders) {
+            if (hitCollider.TryGetComponent(out IInteractable interactable)){
+                interactable.Interact();
             }
         }
     }
 
     void OnDrawGizmosSelected() {
         Gizmos.color = Color.blue;
-        Gizmos.DrawWireSphere(transform.position, interactRadius);
+        Gizmos.DrawWireSphere(interactPoint.position, interactRadius);
     } 
     #endregion
 

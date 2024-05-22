@@ -13,9 +13,13 @@ MonoBehaviour:
   m_Name: TestDialogue
   m_EditorClassIdentifier: 
   dialogueLines:
-  - Hello there, traveler!
-  - The weather is nice today, isn't it?
-  - It's dangerous to go alone, take this!
-  - sorry, I cant actually give anything, that hasnt been programmed in...
-  - Stay safe, the roads are dangerous these days.
+  - A
+  - 'The weather is nice today, isn''t it?
+
+
+    A'
+  - 'Stay safe, the roads are dangerous these days.
+
+
+    A'
   choices: []

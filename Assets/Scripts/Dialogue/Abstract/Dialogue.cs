@@ -5,8 +5,10 @@ using UnityEngine;
 public abstract class Dialogue : MonoBehaviour
 {
     public DialogueManager dialogueManager;
-    public DialogueData dialogue;
-    protected int currentDialogueIndex = 0;
+    public DialogueData proximityDialogue;
+    public bool randomizeProximityDialogue;
+    public DialogueData clickDialogue;
+    protected int currentClickDialogueIndex = 0;
     protected GameObject dialogueBox;
     protected TypewriterEffect typewriterEffect;
 
@@ -17,17 +19,26 @@ public abstract class Dialogue : MonoBehaviour
     }
 
     protected virtual void ShowCurrentDialogue() {
-        if (dialogue.dialogueLines.Count > 0 && currentDialogueIndex < dialogue.dialogueLines.Count) {
-            dialogueManager.ShowDialogue(dialogueBox, dialogue.dialogueLines[currentDialogueIndex]);
-            if (currentDialogueIndex == dialogue.dialogueLines.Count - 1 && dialogue.choices.Count > 0) {
-                dialogueManager.ShowChoices(dialogueBox, dialogue.choices);
+        if (clickDialogue.dialogueLines.Count > 0 && currentClickDialogueIndex < clickDialogue.dialogueLines.Count) {
+            dialogueManager.ShowDialogue(dialogueBox, clickDialogue.dialogueLines[currentClickDialogueIndex]);
+            if (currentClickDialogueIndex == clickDialogue.dialogueLines.Count - 1 && clickDialogue.choices.Count > 0) {
+                dialogueManager.ShowChoices(dialogueBox, clickDialogue.choices);
             }
         }
     }
 
+    protected virtual void ShowProximityDialogue()
+    {
+        if (proximityDialogue.dialogueLines.Count > 0)
+        {
+            int index = randomizeProximityDialogue ? Random.Range(0, proximityDialogue.dialogueLines.Count) : 0;
+            dialogueManager.ShowDialogue(dialogueBox, proximityDialogue.dialogueLines[index]);
+        }
+    }
+
     public void SelectChoice(DialogueChoice choice) {
-        dialogue = choice.nextDialogue;
-        currentDialogueIndex = 0;
+        clickDialogue = choice.nextDialogue;
+        currentClickDialogueIndex = 0;
         ShowCurrentDialogue();
     }
 
@@ -36,13 +47,13 @@ public abstract class Dialogue : MonoBehaviour
             typewriterEffect.StopTypingAndShowFullText();
         }
         else {
-            currentDialogueIndex++;
-            if (currentDialogueIndex >= dialogue.dialogueLines.Count) {
-                if (dialogue.choices.Count > 0) {
-                    dialogueManager.ShowChoices(dialogueBox, dialogue.choices);
+            currentClickDialogueIndex++;
+            if (currentClickDialogueIndex >= clickDialogue.dialogueLines.Count) {
+                if (clickDialogue.choices.Count > 0) {
+                    dialogueManager.ShowChoices(dialogueBox, clickDialogue.choices);
                 }
                 else {
-                    currentDialogueIndex = 0; // Reset index if there are no choices
+                    currentClickDialogueIndex = 0; // Reset index if there are no choices
                     dialogueBox.SetActive(false); // Hide dialogue box if no choices
                 }
             }

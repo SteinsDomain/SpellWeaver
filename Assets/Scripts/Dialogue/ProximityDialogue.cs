@@ -24,16 +24,16 @@ public class ProximityDialogue : Dialogue
         }
         else {
             if (dialogueBox.activeSelf) {
-                currentDialogueIndex = 0;
+                currentClickDialogueIndex = 0;
                 dialogueBox.SetActive(false);
             }
         }
     }
 
     protected override void ShowCurrentDialogue() {
-        if (dialogue.dialogueLines.Count > 0) {
-            int index = randomizeDialogue ? Random.Range(0, dialogue.dialogueLines.Count) : 0;
-            dialogueManager.ShowDialogue(dialogueBox, dialogue.dialogueLines[index]);
+        if (clickDialogue.dialogueLines.Count > 0) {
+            int index = randomizeDialogue ? Random.Range(0, clickDialogue.dialogueLines.Count) : 0;
+            dialogueManager.ShowDialogue(dialogueBox, clickDialogue.dialogueLines[index]);
         }
     }
 

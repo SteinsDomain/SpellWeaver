@@ -12,5 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d0d94d37fcc0d44798a2df0d6db621f, type: 3}
   m_Name: TestQuestion
   m_EditorClassIdentifier: 
-  dialogueLines: []
+  dialogueLines:
+  - Wanna Hear a Secret?
+  - 'Sorry, dont have one '
   choices: []
