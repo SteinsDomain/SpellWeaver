@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 971b93367a7c1784fb7fd4ab0bd6026b, type: 3}
+  m_Name: ArcaneWard
+  m_EditorClassIdentifier: 
+  spellName: Arcane Ward
+  mpCost: 10
+  manaDrainRate: 2
+  mpRegenCooldown: 3
+  castsPerSecond: 15
+  requiresConcentration: 0
+  canAim: 0
+  barrierPrefab: {fileID: 1868784812370561044, guid: 209bf902b83d1494eb9a298bfdcf2d89, type: 3}
+  requiresHold: 1
+  drainsMana: 1
+  isBreakable: 0
+  barrierHealth: 0
+  barrierDuration: 100
+  centersOnCaster: 0
+  isStationary: 0

@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4154b5d8fecf42b46b8c465e38d847c1, type: 3}
+  m_Name: BigGreenStats
+  m_EditorClassIdentifier: 
+  maxHP: 100
+  hpRegenRate: 0
+  maxMP: 100
+  mpRegenAmount: 1
+  mpRegenRate: 1
+  groundSpeed: 10
+  groundAccelerationTime: 1
+  groundDecelerationTime: 0.5
+  airSpeed: 10
+  airAccelerationTime: 0.2
+  airDecelerationTime: 1
+  groundJumpHeight: 3
+  jumpDecay: 100
+  gravity: 50
+  airJumpHeight: 3
+  maxAirJumps: 1
+  wallJumpDirection: {x: 1, y: 2}
+  wallJumpForce: 20
+  wallJumpDuration: 0.2
+  wallSlideGravityMod: 0
+  maxWallSlideSpeed: 2
+  inputOverrideDuration: 0.02
+  dashSpeed: 2
+  dashDuration: 0.5
+  dashCooldown: 1
+  dashGravityMod: 0
