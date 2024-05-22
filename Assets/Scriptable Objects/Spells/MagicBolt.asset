@@ -23,7 +23,7 @@ MonoBehaviour:
   projectilePrefab: {fileID: 3082819435468633395, guid: 52f558099c29a35409fd78264902e86a, type: 3}
   explosionPrefab: {fileID: 0}
   hitEffect: {fileID: 7342286864558875182, guid: bfaf5e99cf87671448fbd08c4de83b45, type: 3}
-  projectileSpeed: 50
+  projectileSpeed: 20
   projectileKnockback: 0
   projectileRecoil: 0
   projectileDamage: 10

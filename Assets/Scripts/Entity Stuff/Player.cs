@@ -120,6 +120,29 @@ public class Player : MonoBehaviour {
         // Initialize position and rotation
         activeMeleeAttack.transform.localPosition = currentAttackData.swingStartPoint;
         activeMeleeAttack.transform.localRotation = Quaternion.Euler(currentAttackData.swingStartRotation);
+
+        if (attackPoint.parent != null)
+        {
+            if (attackPoint.parent.CompareTag("Player"))
+            {
+                activeMeleeAttack.layer = LayerMask.NameToLayer("Player Melee");
+                Debug.Log("Assigned to Player Projectiles layer.");
+            }
+            else if (attackPoint.parent.CompareTag("Enemy"))
+            {
+                activeMeleeAttack.layer = LayerMask.NameToLayer("Enemy Melee");
+                Debug.Log("Assigned to Enemy Projectiles layer.");
+            }
+            else
+            {
+                Debug.LogError("Origin parent is neither Player nor Enemy. Using default layer.");
+                activeMeleeAttack.layer = LayerMask.NameToLayer("Default");
+            }
+        }
+
+        var behaviour = activeMeleeAttack.AddComponent<MeleeBehaviour>();
+        behaviour.attackData = currentAttackData;
+        behaviour.SetOriginLayer(attackPoint.parent.gameObject.layer);
     }
 
     void UpdateMeleeAttack() {

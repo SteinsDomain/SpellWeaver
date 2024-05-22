@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   meleePrefab: {fileID: 6318907146629919978, guid: c47e1ad6ec81bee4499715596f365004, type: 3}
   hitDuration: 0.2
-  damage: 0
+  damage: 15
   swingStartPoint: {x: -0.4, y: -0.54, z: 0}
   swingEndPoint: {x: -1, y: 1, z: 0}
   swingStartRotation: {x: 0, y: 0, z: 157}
