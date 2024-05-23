@@ -259,7 +259,7 @@ public class Player : MonoBehaviour {
         Collider2D[] hitColliders = Physics2D.OverlapCircleAll(interactPoint.position, interactRadius, interactableLayer);
         foreach (Collider2D hitCollider in hitColliders) {
             if (hitCollider.TryGetComponent(out IInteractable interactable)){
-                interactable.Interact();
+                interactable.Interact(gameObject);
             }
         }
     }

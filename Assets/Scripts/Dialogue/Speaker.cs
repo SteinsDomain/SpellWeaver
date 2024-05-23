@@ -77,7 +77,7 @@ public class Speaker : Dialogue, IInteractable
         }
     }
 
-    public void Interact()
+    public void Interact(GameObject interactor)
     {
         if (playerInRange)
         {

@@ -16,23 +16,23 @@ MonoBehaviour:
   hpRegenRate: 0
   maxMP: 100
   mpRegenAmount: 1
-  mpRegenRate: 1
+  mpRegenRate: 0.01
   groundSpeed: 10
   groundAccelerationTime: 1
   groundDecelerationTime: 0.5
   airSpeed: 10
   airAccelerationTime: 0.2
-  airDecelerationTime: 0.1
+  airDecelerationTime: 1
   groundJumpHeight: 3
-  jumpDecay: 0
+  jumpDecay: 100
   gravity: 50
   airJumpHeight: 2
-  maxAirJumps: 5
+  maxAirJumps: 1
   wallJumpDirection: {x: 1, y: 2}
-  wallJumpForce: 0
+  wallJumpForce: 20
   wallJumpDuration: 0.2
-  wallSlideGravityMod: 0
-  maxWallSlideSpeed: 2
+  wallSlideGravityMod: 0.2
+  maxWallSlideSpeed: 5
   inputOverrideDuration: 0.02
   dashSpeed: 2
   dashDuration: 0.5

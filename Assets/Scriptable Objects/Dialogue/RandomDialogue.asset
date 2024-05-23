@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d0d94d37fcc0d44798a2df0d6db621f, type: 3}
+  m_Name: RandomDialogue
+  m_EditorClassIdentifier: 
+  dialogueLines:
+  - "The weather is nice today, \nisn't it?"
+  - "Stay safe, \nthe roads are dangerous these days."
+  - "I swear, \nthe prices at the market keep going up."
+  - "Be careful out there, \nI heard there are bandits on the roads."
+  - "The blacksmith's been working on something special. \nWonder what it is."
+  - "Watch your step, stranger. \nThe streets can be dangerous at night."
+  - "The forest has been eerily quiet. \nMakes me wonder what's lurking in there."
+  choices: []

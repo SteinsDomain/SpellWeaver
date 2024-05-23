@@ -15,7 +15,7 @@ public class Enemy : MonoBehaviour
 
     public bool isFacingRight = true;
     private Vector2 moveDirection = Vector2.zero;
-    public float horizontalSpeed = 0f;
+    private float horizontalSpeed = 0f;
     private float verticalSpeed = 0f;
     private float smoothTime;
     public bool isGrounded;
@@ -221,7 +221,7 @@ public class Enemy : MonoBehaviour
             ApplyGravity();
         }
         else {
-            verticalSpeed = Mathf.Max(0, verticalSpeed); // Prevents verticalSpeed from going negative while grounded
+            //verticalSpeed = Mathf.Max(0, verticalSpeed); // Prevents verticalSpeed from going negative while grounded
         }
     }
     private void ApplyGravity(float modifier = 1f) {

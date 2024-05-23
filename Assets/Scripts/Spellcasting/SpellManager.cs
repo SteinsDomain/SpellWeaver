@@ -12,19 +12,20 @@ public class SpellManager : MonoBehaviour {
 
     public Transform castPoint;
     public ManaManager manaManager;
-    public RadialMenu schoolMenu;
-    public RadialMenu elementMenu;
 
-    [SerializeField] private List<SpellCombinations> spellCombinations;
+    [SerializeField] private StandardSpellCombosSO standardSpellCombinations;  // Reference to the standard spell combinations
+    [SerializeField] private List<SpellCombinations> customSpellCombinations;
     [SerializeField] private List<ElementEffectMapping> elementEffects;
     [SerializeField] private List<SchoolEffectMapping> schoolEffects;
-    private Dictionary<(Element, School), Spell> spellInstances;
+    public Dictionary<(Element, School), Spell> spellInstances;
     public Spell currentSpellInstance;
 
     public enum Element { Arcane, Fire, Ice, Thunder, Earth }
     public enum School { Evoke, Conjure }
-    public Element currentElement = Element.Arcane;
-    public School currentSchool = School.Evoke;
+    [SerializeField] private List<Element> availableElements;
+    [SerializeField] private List<School> availableSchools;
+    public Element currentElement;
+    public School currentSchool;
 
     private bool isConcentrating;
     public bool IsConcentrating {
@@ -34,7 +35,9 @@ public class SpellManager : MonoBehaviour {
     
     void Awake() {
         FindSpellcastingComponents();
+        PopulateCustomCombinations();
         InitializeSpellMap();
+        EnsureValidCurrentSelections();  // Ensure currentElement and currentSchool are valid to start
         UpdateCurrentSpell();
     }
     private void FindSpellcastingComponents() {
@@ -49,11 +52,26 @@ public class SpellManager : MonoBehaviour {
     }
 
     #region Spell Switching for Player
+
+    private void PopulateCustomCombinations() {
+        // Create a dictionary for quick lookup of existing custom combinations
+        var customCombinationLookup = customSpellCombinations.ToDictionary(combo => (combo.element, combo.school));
+
+        // Iterate through the standard combinations
+        foreach (var standardCombo in standardSpellCombinations.spellCombinations) {
+            var key = (standardCombo.element, standardCombo.school);
+
+            // If the custom combinations do not already contain this standard combination, add it
+            if (!customCombinationLookup.ContainsKey(key)) {
+                customSpellCombinations.Add(standardCombo);
+            }
+        }
+    }
     private void InitializeSpellMap() {
+
         spellInstances = new Dictionary<(Element, School), Spell>();
 
-        foreach (var combo in spellCombinations) {
-
+        foreach (var combo in customSpellCombinations) {
             Spell spellInstance;
             if (combo.spell is ProjectileSpellData) {
                 spellInstance = new ProjectileSpell(castPoint, manaManager, combo.spell);
@@ -66,56 +84,74 @@ public class SpellManager : MonoBehaviour {
             }
             spellInstances[(combo.element, combo.school)] = spellInstance;
         }
+
+
+    }
+    private void EnsureValidCurrentSelections() {
+        if (!availableElements.Contains(currentElement)) {
+            currentElement = availableElements.First();
+        }
+        if (!availableSchools.Contains(currentSchool)) {
+            currentSchool = availableSchools.First();
+        }
     }
     public void HandleElementSelect() {
         CycleElements();
         UpdateCurrentSpell();
-        InitializeSpellMap();
+        //InitializeSpellMap();
     }
     public void HandleSchoolSelect() {
         CycleSchools();
         UpdateCurrentSpell();
-        InitializeSpellMap();
+        //InitializeSpellMap();
     }
     private void CycleElements() {
         Element originalElement = currentElement;
-        bool validElementFound = false;
-        int attempts = 0;
-        do {
-            currentElement = (Element)(((int)currentElement + 1) % Enum.GetNames(typeof(Element)).Length);
-            validElementFound = spellCombinations.Any(sc => sc.element == currentElement);
-            if (validElementFound) {
-                if (currentElement != originalElement) {
+        int originalIndex = availableElements.IndexOf(originalElement);
+
+
+        // Ensure currentElement is valid
+        if (originalIndex == -1) {
+            currentElement = availableElements[0];
+            originalIndex = 0;
+        }
+
+
+        for (int i = 1; i <= availableElements.Count; i++) {
+            int newIndex = (originalIndex + i) % availableElements.Count;
+            Element newElement = availableElements[newIndex];
+            if (customSpellCombinations.Any(sc => sc.element == newElement)) {
+                if (currentElement != newElement) {
+                    currentElement = newElement;
                     PlayElementEffect(currentElement);
                 }
-                break;
+                return;
             }
-            attempts++;
         }
-        while (currentElement != originalElement && attempts < Enum.GetNames(typeof(Element)).Length);
-        if (!validElementFound) {
-            currentElement = originalElement;  // Reset to original if no valid combination is found
-        }
+        currentElement = originalElement;  // Reset to original if no valid combination is found
     }
     private void CycleSchools() {
         School originalSchool = currentSchool;
-        bool validSchoolFound = false;
-        int attempts = 0;
-        do {
-            currentSchool = (School)(((int)currentSchool + 1) % Enum.GetNames(typeof(School)).Length);
-            validSchoolFound = spellCombinations.Any(sc => sc.school == currentSchool);
-            if (validSchoolFound) {
-                if (currentSchool != originalSchool) {
+        int originalIndex = availableSchools.IndexOf(originalSchool);
+
+        // Ensure currentSchool is valid
+        if (originalIndex == -1) {
+            currentSchool = availableSchools[0];
+            originalIndex = 0;
+        }
+
+        for (int i = 1; i <= availableSchools.Count; i++) {
+            int newIndex = (originalIndex + i) % availableSchools.Count;
+            School newSchool = availableSchools[newIndex];
+            if (customSpellCombinations.Any(sc => sc.school == newSchool)) {
+                if (currentSchool != newSchool) {
+                    currentSchool = newSchool;
                     PlaySchoolEffect(currentSchool);
                 }
-                break;
+                return;
             }
-            attempts++;
         }
-        while (currentSchool != originalSchool && attempts < Enum.GetNames(typeof(School)).Length);
-        if (!validSchoolFound) {
-            currentSchool = originalSchool;  // Reset to original if no valid combination is found
-        }
+        currentSchool = originalSchool;  // Reset to original if no valid combination is found
     }
     private void UpdateCurrentSpell() {
         if (spellInstances.TryGetValue((currentElement, currentSchool), out Spell spell)) {
@@ -144,49 +180,25 @@ public class SpellManager : MonoBehaviour {
             Destroy(effect.gameObject, effect.main.duration);
         }
     }
-
     private void AdjustEffectRotation(Transform effectTransform) {
         float casterFacingDirection = Mathf.Sign(castPoint.parent.localScale.x);
         effectTransform.localScale = new Vector3(casterFacingDirection, 1, 1);
     }
-    #region Unused Radial Menu Stuff
-    private void OpenElementMenu() {
-        var elementItems = spellCombinations.Select(sc => new RadialMenuItem { AssociatedElement = sc.element }).Distinct();
-        elementMenu.Initialize(elementItems);
-        elementMenu.gameObject.SetActive(true);
-    }
-    private void OpenSchoolMenu() {
-        var schoolItems = spellCombinations.Select(sc => new RadialMenuItem { AssociatedSchool = sc.school }).Distinct();
-        schoolMenu.Initialize(schoolItems);
-        schoolMenu.gameObject.SetActive(true);
-    }
-    public void UpdateElementMenuDirection(Vector2 direction) {
-        elementMenu.UpdateSelection(direction);
-    }
-    public void UpdateSchoolMenuDirection(Vector2 direction) {
-        schoolMenu.UpdateSelection(direction);
-    }
-    public void HandleElementMenuClose() {
-        Element selectedElement = elementMenu.SelectElementOption();
-        if (selectedElement != currentElement) {
-            currentElement = selectedElement;
-            PlayElementEffect(currentElement);
-            UpdateCurrentSpell();
-            InitializeSpellMap();
-            elementMenu.gameObject.SetActive(false);
-        }
-    }
-    public void HandleSchoolMenuClose() {
-        School selectedSchool = schoolMenu.SelectSchoolOption();
-        if (selectedSchool != currentSchool) {
-            currentSchool = selectedSchool;
-            PlaySchoolEffect(currentSchool);
-            UpdateCurrentSpell();
-            InitializeSpellMap();
-            schoolMenu.gameObject.SetActive(false);
-        }
-    } 
+
     #endregion
+
+    #region Adding Elements and Schools
+    public void AddAvailableElement(Element element) {
+        if (!availableElements.Contains(element)) {
+            availableElements.Add(element);
+        }
+    }
+
+    public void AddAvailableSchool(School school) {
+        if (!availableSchools.Contains(school)) {
+            availableSchools.Add(school);
+        }
+    }
     #endregion
 
     #region Casting Methods

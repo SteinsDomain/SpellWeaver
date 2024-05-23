@@ -16,23 +16,23 @@ MonoBehaviour:
   mpCost: 0
   manaDrainRate: 0
   mpRegenCooldown: 3
-  castsPerSecond: 15
+  castsPerSecond: 1
   requiresConcentration: 0
   canAim: 0
   shotType: 0
   projectilePrefab: {fileID: 1426571478921374127, guid: 7191d62005fb44b41b0785f04e1f7889, type: 3}
-  explosionPrefab: {fileID: 0}
+  explosionPrefab: {fileID: 3825735178010562562, guid: bde001ace8c736e48af4fd684d55bb19, type: 3}
   hitEffect: {fileID: 693620553653586790, guid: c523f3c5c54e48e448a672616c0c3db4, type: 3}
-  projectileSpeed: 20
+  projectileSpeed: 15
   projectileKnockback: 0
   projectileRecoil: 0
-  projectileDamage: 25
+  projectileDamage: 0
   maxProjectileRange: 10
-  isExplosive: 0
-  explosionDelay: 0
-  explosionSize: 0
+  isExplosive: 1
+  explosionDelay: 2
+  explosionSize: 0.5
   explosionKnockbackForce: 0
-  explosionDamage: 0
+  explosionDamage: 25
   shotsPerBurst: 0
   burstShotDelay: 0
   isDetonatable: 0

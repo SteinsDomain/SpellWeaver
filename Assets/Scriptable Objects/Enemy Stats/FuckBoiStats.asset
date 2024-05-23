@@ -14,12 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHP: 30
   hpRegenRate: 0
-  maxMP: 100
+  maxMP: 2147483647
   mpRegenAmount: 0
   mpRegenRate: 1
   groundSpeed: 10
   groundAccelerationTime: 0.1
-  groundDecelerationTime: 0
+  groundDecelerationTime: 0.1
   airSpeed: 0
   airAccelerationTime: 0
   airDecelerationTime: 0
@@ -28,9 +28,13 @@ MonoBehaviour:
   gravity: 50
   airJumpHeight: 0
   maxAirJumps: 0
-  wallJumpDirection: {x: 1, y: 1}
-  wallJumpForce: 20
-  wallJumpDuration: 0.2
-  wallSlideGravityMod: 0.2
-  maxWallSlideSpeed: 5
-  inputOverrideDuration: 0.1
+  wallJumpDirection: {x: 0, y: 0}
+  wallJumpForce: 0
+  wallJumpDuration: 0
+  wallSlideGravityMod: 0
+  maxWallSlideSpeed: 0
+  inputOverrideDuration: 0
+  dashSpeed: 0
+  dashDuration: 0
+  dashCooldown: 0
+  dashGravityMod: 0

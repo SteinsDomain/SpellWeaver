@@ -305,8 +305,8 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.005027652, y: 0.1381216}
-  m_Size: {x: 1.0413268, y: 1.7451954}
+  m_Offset: {x: 0, y: 0}
+  m_Size: {x: 1, y: 2}
   m_Direction: 0
 --- !u!114 &302238960657195216
 MonoBehaviour:
@@ -325,8 +325,8 @@ MonoBehaviour:
   horizontalSpeed: 0
   isGrounded: 0
   shouldMove: 1
-  attackRange: 10
-  chaseRange: 15
+  attackRange: 3
+  chaseRange: 6
   attackCooldown: 0.5
   idlePauseDuration: 2
   wanderRange: 4
@@ -345,8 +345,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   castPoint: {fileID: 2355242372304806984}
   manaManager: {fileID: 5533022144880892843}
-  elementMenu: {fileID: 0}
   schoolMenu: {fileID: 0}
+  elementMenu: {fileID: 0}
   spellCombinations:
   - element: 0
     school: 0
@@ -391,6 +391,7 @@ MonoBehaviour:
   verticalCastBuffer: 0.01
   horizontalCastBuffer: 0.01
   collisionAdjustmentBuffer: 0.01
+  wallCheckDistance: 0.1
 --- !u!1 &8952802755833043250
 GameObject:
   m_ObjectHideFlags: 0

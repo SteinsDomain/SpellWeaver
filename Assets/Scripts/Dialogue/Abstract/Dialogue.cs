@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public abstract class Dialogue : MonoBehaviour
 {
@@ -11,6 +12,10 @@ public abstract class Dialogue : MonoBehaviour
     protected int currentClickDialogueIndex = 0;
     protected GameObject dialogueBox;
     protected TypewriterEffect typewriterEffect;
+
+    private void Awake() {
+        if (dialogueManager == null) dialogueManager = FindAnyObjectByType<DialogueManager>();
+    }
 
     protected virtual void Start() {
         dialogueBox = dialogueManager.CreateDialogueBox();
