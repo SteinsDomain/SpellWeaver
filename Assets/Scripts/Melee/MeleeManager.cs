@@ -18,6 +18,7 @@ public class MeleeManager : MonoBehaviour
 
     private bool isCurrentAttackInCooldown = false;
     private bool isComboInCooldown = false;
+    private bool inputBuffered = false;
     #endregion
 
     private void Update() {
@@ -26,13 +27,18 @@ public class MeleeManager : MonoBehaviour
     }
     public void TryMelee() {
         if (!isComboInCooldown) {
-            if (comboCount < meleeCombo.Length && isCurrentAttackInCooldown) {
+            if (!isCurrentAttackInCooldown && activeMeleeAttack == null) {
                 comboCount++;
-                StartMeleeAttack(comboCount);
+                if (comboCount <= meleeCombo.Length) {
+                    StartMeleeAttack(comboCount);
+                }
+                else {
+                    comboCount = 1;
+                    StartMeleeAttack(comboCount);
+                }
             }
-            else if (!isCurrentAttackInCooldown) {
-                comboCount = 1;
-                StartMeleeAttack(comboCount);
+            else if (isCurrentAttackInCooldown) {
+                inputBuffered = true;
             }
         }
     }
@@ -124,6 +130,12 @@ public class MeleeManager : MonoBehaviour
                     // If it's the last attack in the combo, start the combo cooldown
                     if (comboCount >= meleeCombo.Length) {
                         isComboInCooldown = true;
+                        comboCount = 0; // Reset combo count
+                    }
+                    // If input was buffered, start the next attack
+                    if (inputBuffered) {
+                        inputBuffered = false;
+                        TryMelee();
                     }
                 }
             }
@@ -147,6 +159,11 @@ public class MeleeManager : MonoBehaviour
                 if (isComboInCooldown) {
                     comboCount = 0;
                     isComboInCooldown = false;
+                }
+                // If input was buffered, start the next attack
+                if (inputBuffered) {
+                    inputBuffered = false;
+                    TryMelee();
                 }
             }
         }

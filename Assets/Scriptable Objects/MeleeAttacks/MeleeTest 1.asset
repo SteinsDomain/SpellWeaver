@@ -21,4 +21,4 @@ MonoBehaviour:
   swingEndRotation: {x: 0, y: 0, z: -90}
   arcHeight: 0
   startUpTime: 0
-  coolDown: 0.2
+  coolDown: 0.1
