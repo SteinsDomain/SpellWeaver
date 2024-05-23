@@ -46,11 +46,9 @@ public class Enemy : MonoBehaviour
     void Update() {
         CheckGrounded();
         HandleFalling();
-        Move();
-        UpdateHorizontalPosition();
-        UpdateVerticalPosition();
-
         UpdateStateMachine();
+        Move();
+        UpdatePosition();
     }
 
     private void UpdateStateMachine() {
@@ -187,7 +185,9 @@ public class Enemy : MonoBehaviour
             }
         }
     }
-
+    public Vector3 GetPlayerPosition() {
+        return GameObject.FindWithTag("Player").transform.position;
+    }
     public void SetMoveDirection(Vector3 direction) {
         // Update the moveDirection based on the AI's decision
         moveDirection = direction;
@@ -227,9 +227,6 @@ public class Enemy : MonoBehaviour
     private void ApplyGravity(float modifier = 1f) {
         verticalSpeed -= (stats.gravity * modifier) * Time.deltaTime;
     }
-    public Vector3 GetPlayerPosition() {
-        return GameObject.FindWithTag("Player").transform.position;
-    }
     private void UpdateHorizontalMovement() {
             float targetspeed = moveDirection.x * stats.groundSpeed;
             float speedDiff = targetspeed - horizontalSpeed;
@@ -240,11 +237,9 @@ public class Enemy : MonoBehaviour
             // Clamp the horizontal speed to prevent it from exceeding the target speed.
             horizontalSpeed = Mathf.Clamp(horizontalSpeed, -stats.groundSpeed, stats.groundSpeed);
     }
-    private void UpdateHorizontalPosition() {
+    private void UpdatePosition() {
         horizontalSpeed = collisionManager.CheckForHorizontalCollision(horizontalSpeed, transform);
         transform.position += new Vector3(horizontalSpeed * Time.deltaTime, 0, 0);
-    }
-    private void UpdateVerticalPosition() {
         verticalSpeed = collisionManager.CheckForVerticalCollision(verticalSpeed, transform);
         transform.position += new Vector3(0, verticalSpeed * Time.deltaTime, 0);
     }

@@ -45,6 +45,12 @@ public class Speaker : Dialogue, IInteractable
     }
     private void ResetDialogue()
     {
+        if (dialogueBox != null) {
+            var textComponent = dialogueBox.GetComponentInChildren<TMPro.TextMeshProUGUI>();
+            if (textComponent != null) {
+                textComponent.text = string.Empty;
+            }
+        }
         dialogueBox.SetActive(false);
         isProximityDialogueActive = false;
         currentClickDialogueIndex = 0;

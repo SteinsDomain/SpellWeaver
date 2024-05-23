@@ -15,7 +15,7 @@ public class Player : MonoBehaviour {
     [SerializeField] private GameInput gameInput;
     public StatsSO stats;
 
-    public enum MovementControls {Platformer, TopDown}
+    public enum MovementControls {Platformer, TopDown, Runner}
     public MovementControls movementControls;
 
     public bool isGrounded; 
@@ -62,18 +62,21 @@ public class Player : MonoBehaviour {
             TopDownMovement();
             HandleAiming360();
             break;
+
+            case MovementControls.Runner:
+            RunnerMovement();
+            HandleAimingUp();
+            break;
         }
 
         UpdatePosition();
-
         HandleMelee();
-        
-
         HandleSpellSelect();
         HandleSpellCasting();
-
         HandleInteractions();
     }
+
+    
 
     //New Stuff
     void HandleMelee() {
@@ -81,13 +84,6 @@ public class Player : MonoBehaviour {
             meleeManager.TryMelee();
         }
     }
-
-
-
-
-
-
-
 
     #region Interactions
     private void HandleInteractions() {
@@ -168,6 +164,13 @@ public class Player : MonoBehaviour {
         UpdateHorizontalMovement();
         UpdateVerticalMovement();
         FlipPlayerSprite();
+    }
+    private void RunnerMovement() {
+        CheckGrounded();
+        HandleFalling();
+        Jump();
+        moveDirection = Vector2.right;
+        UpdateHorizontalMovement();
     }
 
     private void GetMovementInput() {
