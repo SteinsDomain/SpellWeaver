@@ -13,12 +13,15 @@ MonoBehaviour:
   m_Name: MeleeTest 3
   m_EditorClassIdentifier: 
   meleePrefab: {fileID: 6318907146629919978, guid: c47e1ad6ec81bee4499715596f365004, type: 3}
-  hitDuration: 0.1
+  hitDuration: 0.15
   damage: 15
-  swingStartPoint: {x: 0, y: 1, z: 0}
-  swingEndPoint: {x: 0, y: -0.5, z: 0}
-  swingStartRotation: {x: 0, y: 0, z: 45}
-  swingEndRotation: {x: 0, y: 0, z: -90}
-  arcHeight: -1
+  knockbackForce: 0
+  knockbackDirection: {x: 0, y: 0}
+  swingStartPoint: {x: -0.12, y: -0.17, z: 0}
+  swingEndPoint: {x: -1.64, y: 0.63, z: 0}
+  swingStartRotation: {x: 0, y: 0, z: 250.2}
+  swingEndRotation: {x: 0, y: 0, z: 358.2}
+  arcHeight: 1.67
   startUpTime: 0
-  coolDown: 0.1
+  coolDown: 0.3
+  hitEffect: {fileID: 0}

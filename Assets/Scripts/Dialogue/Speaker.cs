@@ -87,12 +87,13 @@ public class Speaker : Dialogue, IInteractable
     {
         if (playerInRange)
         {
-            if (isProximityDialogueActive)
-            {
-                ResetDialogue();
-            }
+            if (clickDialogue.dialogueLines.Count > 0) {
+                if (isProximityDialogueActive) {
+                    StopTalking();
+                }
 
-            HandleClickDialogue();
+                HandleClickDialogue();
+            }
         }
     }
 

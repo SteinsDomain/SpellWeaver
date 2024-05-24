@@ -608,7 +608,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stats: {fileID: 11400000, guid: 045d0f37c9cf56e4b9fc4313b70e07bd, type: 2}
   isFacingRight: 1
-  horizontalSpeed: 0
   isGrounded: 0
   shouldMove: 1
   attackRange: 3
@@ -636,9 +635,9 @@ MonoBehaviour:
   elementEffects: []
   schoolEffects: []
   currentSpellInstance: {fileID: 0}
-  availableElements: 01000000
+  availableElements: 00000000
   availableSchools: 00000000
-  currentElement: 1
+  currentElement: 0
   currentSchool: 0
 --- !u!114 &9169413528601025964
 MonoBehaviour:

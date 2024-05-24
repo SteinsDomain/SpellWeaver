@@ -88,10 +88,18 @@ public class SpellManager : MonoBehaviour {
 
     }
     private void EnsureValidCurrentSelections() {
-        if (!availableElements.Contains(currentElement)) {
+
+        if (availableElements.Count == 0) {
+            currentElement = default(Element); // Handle empty list scenario
+        }
+        else if (!availableElements.Contains(currentElement)) {
             currentElement = availableElements.First();
         }
-        if (!availableSchools.Contains(currentSchool)) {
+
+        if (availableSchools.Count == 0) {
+            currentSchool = default(School); // Handle empty list scenario
+        }
+        else if (!availableSchools.Contains(currentSchool)) {
             currentSchool = availableSchools.First();
         }
     }
@@ -106,6 +114,8 @@ public class SpellManager : MonoBehaviour {
         //InitializeSpellMap();
     }
     private void CycleElements() {
+        if (availableElements.Count == 0) return;
+
         Element originalElement = currentElement;
         int originalIndex = availableElements.IndexOf(originalElement);
 
@@ -131,6 +141,8 @@ public class SpellManager : MonoBehaviour {
         currentElement = originalElement;  // Reset to original if no valid combination is found
     }
     private void CycleSchools() {
+        if (availableSchools.Count == 0) return;
+
         School originalSchool = currentSchool;
         int originalIndex = availableSchools.IndexOf(originalSchool);
 
@@ -154,12 +166,17 @@ public class SpellManager : MonoBehaviour {
         currentSchool = originalSchool;  // Reset to original if no valid combination is found
     }
     private void UpdateCurrentSpell() {
+
+        if (availableElements.Count == 0 || availableSchools.Count == 0) {
+            currentSpellInstance = null;
+            return;
+        }
+
         if (spellInstances.TryGetValue((currentElement, currentSchool), out Spell spell)) {
             currentSpellInstance = spell;
         }
         else {
-            //currentSpell = currentSpell;
-            Debug.LogError("No spell assigned for this element/form combination!");
+            Debug.Log("No spell assigned for this element/form combination!");
         }
     }
     private void PlayElementEffect(Element element) {
@@ -188,15 +205,19 @@ public class SpellManager : MonoBehaviour {
     #endregion
 
     #region Adding Elements and Schools
-    public void AddAvailableElement(Element element) {
-        if (!availableElements.Contains(element)) {
-            availableElements.Add(element);
+    public void AddAvailableElement(Element newElementChoice) {
+        if (!availableElements.Contains(newElementChoice)) {
+            availableElements.Add(newElementChoice);
+            currentElement = newElementChoice;
+            UpdateCurrentSpell();
         }
     }
 
-    public void AddAvailableSchool(School school) {
-        if (!availableSchools.Contains(school)) {
-            availableSchools.Add(school);
+    public void AddAvailableSchool(School newSchoolChoice) {
+        if (!availableSchools.Contains(newSchoolChoice)) {
+            availableSchools.Add(newSchoolChoice);
+            currentSchool = newSchoolChoice;
+            UpdateCurrentSpell();
         }
     }
     #endregion

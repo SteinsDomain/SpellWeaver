@@ -322,7 +322,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stats: {fileID: 11400000, guid: 045d0f37c9cf56e4b9fc4313b70e07bd, type: 2}
   isFacingRight: 1
-  horizontalSpeed: 0
   isGrounded: 0
   shouldMove: 1
   attackRange: 3
@@ -345,15 +344,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   castPoint: {fileID: 2355242372304806984}
   manaManager: {fileID: 5533022144880892843}
-  schoolMenu: {fileID: 0}
-  elementMenu: {fileID: 0}
-  spellCombinations:
-  - element: 0
-    school: 0
-    spell: {fileID: 11400000, guid: 56430408ef17eda4e8fcc8d5a1be4f27, type: 2}
+  standardSpellCombinations: {fileID: 11400000, guid: 67b61c9f77eca8049849a0cf6455270a, type: 2}
+  customSpellCombinations: []
   elementEffects: []
   schoolEffects: []
   currentSpellInstance: {fileID: 0}
+  availableElements: 00000000
+  availableSchools: 00000000
   currentElement: 0
   currentSchool: 0
 --- !u!114 &5533022144880892843

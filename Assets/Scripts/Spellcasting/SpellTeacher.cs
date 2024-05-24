@@ -23,6 +23,7 @@ public class SpellTeacher : MonoBehaviour, IInteractable
             }
 
             Debug.Log("Elements and schools added to available lists.");
+            Destroy(gameObject);
         }
         else {
             Debug.LogError("No SpellManager found on the player.");

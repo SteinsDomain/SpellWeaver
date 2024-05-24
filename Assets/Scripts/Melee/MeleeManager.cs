@@ -2,13 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MeleeManager : MonoBehaviour
-{
+public class MeleeManager : MonoBehaviour {
     #region Melee Variables
     public MeleeAttackData[] meleeCombo;
     public Transform attackPoint;
     private int comboCount = 0;
-    private float comboTimer = 0f;
+    private float stateTimer = 0f;
+
     private GameObject activeMeleeAttack;
     private MeleeAttackData currentAttackData;
     private float attackProgress = 0f;

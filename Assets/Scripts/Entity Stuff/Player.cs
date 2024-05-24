@@ -9,6 +9,7 @@ using UnityEngine.UIElements;
 
 public class Player : MonoBehaviour {
 
+    [SerializeField] private HealthManager healthManager;
     [SerializeField] private MeleeManager meleeManager;
     [SerializeField] private SpellManager spellManager;
     [SerializeField] private CollisionManager collisionManager;
@@ -43,10 +44,18 @@ public class Player : MonoBehaviour {
     #endregion
 
     void Awake() {
-        if (meleeManager == null) meleeManager = gameObject.AddComponent<MeleeManager>();
-        if (spellManager == null) spellManager = gameObject.AddComponent<SpellManager>();
-        if (collisionManager == null) collisionManager = gameObject.AddComponent<CollisionManager>();
-        if(gameInput == null) gameInput = FindAnyObjectByType<GameInput>();
+        
+        TryGetComponent<HealthManager>(out healthManager);
+        if (healthManager != null) {
+            healthManager.OnHealthDepleted += HandleDeath;
+        }
+
+        TryGetComponent<MeleeManager>(out meleeManager);
+        TryGetComponent<SpellManager>(out spellManager);
+        TryGetComponent<CollisionManager>(out collisionManager);
+
+
+        if (gameInput == null) gameInput = FindAnyObjectByType<GameInput>();
     }
     void Start() {
         ResetJump();
@@ -69,10 +78,17 @@ public class Player : MonoBehaviour {
             break;
         }
 
+
+        if (meleeManager != null) {
+            HandleMelee();
+        }
+        if (spellManager != null) {
+            HandleSpellSelect();
+            HandleSpellCasting();
+        }
+
         UpdatePosition();
-        HandleMelee();
-        HandleSpellSelect();
-        HandleSpellCasting();
+        
         HandleInteractions();
     }
 
@@ -359,6 +375,10 @@ public class Player : MonoBehaviour {
         }
     }
     #endregion
+
+    private void HandleDeath() {
+        Destroy(gameObject);
+    }
 
     #region Animation Stuff
     private void FlipPlayerSprite() {

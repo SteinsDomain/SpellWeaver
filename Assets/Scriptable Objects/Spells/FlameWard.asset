@@ -13,17 +13,17 @@ MonoBehaviour:
   m_Name: FlameWard
   m_EditorClassIdentifier: 
   spellName: Flame Ward
-  mpCost: 1
-  manaDrainRate: 10
+  mpCost: 20
+  manaDrainRate: 0
   mpRegenCooldown: 3
-  castsPerSecond: 15
+  castsPerSecond: 0.1
   requiresConcentration: 0
   canAim: 0
   barrierPrefab: {fileID: 2819141491186576354, guid: 304ad1db0d95a0648a2b5b181febabaf, type: 3}
-  requiresHold: 1
+  requiresHold: 0
   drainsMana: 0
-  isBreakable: 1
-  barrierHealth: 50
+  isBreakable: 0
+  barrierHealth: 0
   barrierDuration: 5
   centersOnCaster: 1
   isStationary: 0

@@ -7,6 +7,8 @@ public class MeleeAttackData : ScriptableObject {
     public GameObject meleePrefab;
     public float hitDuration;
     public int damage;
+    public float knockbackForce;
+    public Vector2 knockbackDirection;
     public Vector3 swingStartPoint;
     public Vector3 swingEndPoint;
     public Vector3 swingStartRotation;
@@ -14,4 +16,5 @@ public class MeleeAttackData : ScriptableObject {
     public float arcHeight;
     public float startUpTime;
     public float coolDown;
+    public GameObject hitEffect;
 }

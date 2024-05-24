@@ -27,8 +27,12 @@ public class HealthManager : MonoBehaviour
         currentHP = Mathf.Max(currentHP, 0);
         if (currentHP <= 0) {
             currentHP = 0;
-            OnHealthDepleted?.Invoke();
-            Die();
+            if (OnHealthDepleted != null) {
+                OnHealthDepleted.Invoke();
+            }
+            else {
+                Die();
+            }
         }
     }
     public void RegenerateHealthOverTime() {
@@ -44,7 +48,9 @@ public class HealthManager : MonoBehaviour
         currentHP += amount;
         currentHP = Mathf.Min(currentHP, stats.maxHP);
     }
+
     private void Die() {
         Destroy(gameObject);
     }
+    
 }

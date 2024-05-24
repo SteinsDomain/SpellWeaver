@@ -217,7 +217,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   elementsToAdd: 01000000
-  schoolsToAdd: 
+  schoolsToAdd: 00000000
 --- !u!61 &2805868610410945278
 BoxCollider2D:
   m_ObjectHideFlags: 0

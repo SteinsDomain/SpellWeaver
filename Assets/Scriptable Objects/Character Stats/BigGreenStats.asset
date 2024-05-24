@@ -15,13 +15,13 @@ MonoBehaviour:
   maxHP: 100
   hpRegenRate: 0
   maxMP: 100
-  mpRegenAmount: 1
-  mpRegenRate: 0.01
+  mpRegenAmount: 100
+  mpRegenRate: 1
   groundSpeed: 10
-  groundAccelerationTime: 1
+  groundAccelerationTime: 0.2
   groundDecelerationTime: 0.5
-  airSpeed: 10
-  airAccelerationTime: 0.2
+  airSpeed: 20
+  airAccelerationTime: 0.25
   airDecelerationTime: 1
   groundJumpHeight: 3
   jumpDecay: 100

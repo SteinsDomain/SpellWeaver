@@ -10,6 +10,7 @@ public class Enemy : MonoBehaviour
     private State currentState = State.Idle;
 
     public StatsSO stats;
+    private HealthManager healthManager;
     private SpellManager spellManager;
     private CollisionManager collisionManager;
 
@@ -37,6 +38,10 @@ public class Enemy : MonoBehaviour
     private Transform player;
 
     void Awake() {
+        healthManager = GetComponent<HealthManager>();
+        if (healthManager != null ) {
+            healthManager.OnHealthDepleted += HandleDeath;
+        }
         collisionManager = GetComponent<CollisionManager>();
         spellManager = GetComponent<SpellManager>();
         initialPosition = transform.position;
@@ -242,6 +247,20 @@ public class Enemy : MonoBehaviour
         transform.position += new Vector3(horizontalSpeed * Time.deltaTime, 0, 0);
         verticalSpeed = collisionManager.CheckForVerticalCollision(verticalSpeed, transform);
         transform.position += new Vector3(0, verticalSpeed * Time.deltaTime, 0);
+    }
+
+    public void TakeKnockback(float knockbackForce, Vector2 knockbackDirection) {
+        // Normalize the knockback direction and multiply by the knockback force
+        Vector2 knockback = knockbackDirection.normalized * knockbackForce;
+        horizontalSpeed += knockback.x;
+        verticalSpeed += knockback.y;
+        UpdateHorizontalMovement();
+        Debug.Log($"Enemy: Taking knockback with force {knockbackForce} in direction {knockbackDirection}.");
+    }
+
+    void HandleDeath() {
+        Destroy(gameObject);
+        Debug.Log("Enemy has died.");
     }
 
     void OnDrawGizmosSelected() {
