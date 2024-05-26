@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 873832418181032549}
   - component: {fileID: 8317353222752386040}
   - component: {fileID: 6267610894501751774}
+  - component: {fileID: 1103542042975216458}
   - component: {fileID: 3004408570375469214}
   - component: {fileID: 2788189945316008709}
   - component: {fileID: 4547238219280747748}
@@ -51,7 +52,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd29915a3710aab449bedb4058eab29b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stats: {fileID: 11400000, guid: 71276be25fb69b7449e71c96033ee24c, type: 2}
+  stats: {fileID: 0}
   currentHP: 100
 --- !u!114 &8317353222752386040
 MonoBehaviour:
@@ -65,7 +66,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 972df4b9dacef424ebaa5768d7a25def, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stats: {fileID: 11400000, guid: 71276be25fb69b7449e71c96033ee24c, type: 2}
+  stats: {fileID: 0}
   currentMP: 100
   OnManaChanged:
     m_PersistentCalls:
@@ -82,13 +83,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ee8ec8114074894c8ea2a0a7df4676a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spellManager: {fileID: 3004408570375469214}
-  collisionManager: {fileID: 2788189945316008709}
-  gameInput: {fileID: 0}
   stats: {fileID: 11400000, guid: 71276be25fb69b7449e71c96033ee24c, type: 2}
-  movementControls: 1
+  movementControls: 0
   isGrounded: 0
   isFacingRight: 1
+  interactableLayer:
+    serializedVersion: 2
+    m_Bits: 4096
+  interactRadius: 0.5
+  interactPoint: {fileID: 7477994685279691431}
+--- !u!114 &1103542042975216458
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1837532401461546691}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 266ee4269a5f97e49a7d6f2df5307425, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  meleeCombo: []
+  attackPoint: {fileID: 7477994685279691431}
 --- !u!114 &3004408570375469214
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -102,25 +119,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   castPoint: {fileID: 7477994685279691431}
-  manaManager: {fileID: 0}
-  schoolMenu: {fileID: 0}
-  elementMenu: {fileID: 0}
-  spellCombinations:
-  - element: 0
-    school: 0
-    spell: {fileID: 11400000, guid: 56430408ef17eda4e8fcc8d5a1be4f27, type: 2}
-  - element: 0
-    school: 1
-    spell: {fileID: 11400000, guid: 8ca06efb8e6d71545a59f28a0dbc15bd, type: 2}
-  - element: 0
-    school: 1
-    spell: {fileID: 11400000, guid: 8ca06efb8e6d71545a59f28a0dbc15bd, type: 2}
-  - element: 1
-    school: 0
-    spell: {fileID: 11400000, guid: 665514ede103a724b9658e5aa875adfc, type: 2}
-  - element: 1
-    school: 1
-    spell: {fileID: 11400000, guid: f394f3524792bfb49b9b38bb8f505ea1, type: 2}
+  standardSpellCombinations: {fileID: 11400000, guid: 67b61c9f77eca8049849a0cf6455270a, type: 2}
+  customSpellCombinations: []
   elementEffects:
   - element: 0
     effectPrefab: {fileID: 89872491262761083, guid: ef476909d8acc6e489c99fc8ccefe3db, type: 3}
@@ -138,6 +138,8 @@ MonoBehaviour:
   - school: 1
     effectPrefab: {fileID: 3482078468316096226, guid: de7dc96d146ebd549a79c094b7da8aa9, type: 3}
   currentSpellInstance: {fileID: 0}
+  availableElements: 
+  availableSchools: 
   currentElement: 0
   currentSchool: 0
 --- !u!114 &2788189945316008709

@@ -11,7 +11,6 @@ public class HealthManager : MonoBehaviour
     public delegate void HealthDepletedAction();
     public event HealthDepletedAction OnHealthDepleted;
 
-
     void Awake() {
         if (stats != null) {
             currentHP = stats.maxHP;
@@ -48,9 +47,7 @@ public class HealthManager : MonoBehaviour
         currentHP += amount;
         currentHP = Mathf.Min(currentHP, stats.maxHP);
     }
-
     private void Die() {
         Destroy(gameObject);
     }
-    
 }

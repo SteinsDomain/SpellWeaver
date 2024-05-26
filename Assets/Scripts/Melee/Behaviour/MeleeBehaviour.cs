@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class MeleeBehaviour : MonoBehaviour
 {
-
     public MeleeAttackData attackData;
     private int originLayer;
     private PolygonCollider2D polygonCollider;
@@ -17,7 +16,6 @@ public class MeleeBehaviour : MonoBehaviour
             Debug.LogError("PolygonCollider2D component not found on the melee attack prefab.");
         }
     }
-
     private void OnCollisionEnter2D(Collision2D collision)
     {
         Debug.Log($"MeleeBehaviour: Collision detected with {collision.gameObject.name}.");
@@ -43,12 +41,10 @@ public class MeleeBehaviour : MonoBehaviour
         }
 
     }
-
     public void SetOriginLayer(int layer)
     {
         originLayer = layer;
     }
-
     private bool ShouldAffectTarget(GameObject target)
     {
         return target.layer != originLayer;

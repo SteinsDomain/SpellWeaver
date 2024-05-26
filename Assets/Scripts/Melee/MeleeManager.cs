@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class MeleeManager : MonoBehaviour {
+
     #region Melee Variables
     public MeleeAttackData[] meleeCombo;
     public Transform attackPoint;
@@ -21,10 +22,14 @@ public class MeleeManager : MonoBehaviour {
     private bool inputBuffered = false;
     #endregion
 
+    private void Awake() {
+        attackPoint = transform.Find("CastPoint");
+    }
     private void Update() {
         UpdateComboTimer();
         UpdateMeleeAttack();
     }
+
     public void TryMelee() {
         if (!isComboInCooldown) {
             if (!isCurrentAttackInCooldown && activeMeleeAttack == null) {
@@ -42,7 +47,6 @@ public class MeleeManager : MonoBehaviour {
             }
         }
     }
-
     private void StartMeleeAttack(int comboStep) {
         currentAttackData = meleeCombo[comboStep - 1];
         attackTimer = currentAttackData.startUpTime + currentAttackData.hitDuration;
@@ -75,12 +79,10 @@ public class MeleeManager : MonoBehaviour {
                 activeMeleeAttack.layer = LayerMask.NameToLayer("Default");
             }
         }
-
         var behaviour = activeMeleeAttack.AddComponent<MeleeBehaviour>();
         behaviour.attackData = currentAttackData;
         behaviour.SetOriginLayer(attackPoint.parent.gameObject.layer);
     }
-
     void UpdateMeleeAttack() {
         if (activeMeleeAttack != null) {
             attackProgress += Time.deltaTime;
@@ -121,7 +123,6 @@ public class MeleeManager : MonoBehaviour {
                     isCurrentAttackInCooldown = true;
                     cooldownTimer = currentAttackData.coolDown;
                 }
-
                 // Destroy the active melee attack after the cooldown timer
                 if (cooldownTimer <= 0) {
                     Destroy(activeMeleeAttack);
@@ -141,7 +142,6 @@ public class MeleeManager : MonoBehaviour {
             }
         }
     }
-
     void UpdateComboTimer() {
         if (attackTimer > 0) {
             attackTimer -= Time.deltaTime;
@@ -171,7 +171,6 @@ public class MeleeManager : MonoBehaviour {
             comboCount = 0;
         }
     }
-
     Vector3 CalculateParabolicPath(float t, Vector3 startPos, Vector3 endPos, float arcHeight) {
         // Calculate the midpoint and the direction from start to end
         Vector3 direction = endPos - startPos;
@@ -190,7 +189,6 @@ public class MeleeManager : MonoBehaviour {
         Vector3 parabolicPos = (uu * startPos) + (2 * u * t * controlPoint) + (tt * endPos);
         return parabolicPos;
     }
-
     float EaseInOutSine(float t) {
         return 0.5f * (1 - Mathf.Cos(Mathf.PI * t));
     }

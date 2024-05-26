@@ -17,4 +17,6 @@ public class MeleeAttackData : ScriptableObject {
     public float startUpTime;
     public float coolDown;
     public GameObject hitEffect;
+
+    public AnimationClip swingAnimation;
 }

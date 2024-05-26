@@ -25,3 +25,4 @@ MonoBehaviour:
   startUpTime: 0
   coolDown: 0.1
   hitEffect: {fileID: 0}
+  swingAnimation: {fileID: 7400000, guid: 14a47a3df050efa46a1342ad0ad024f5, type: 2}

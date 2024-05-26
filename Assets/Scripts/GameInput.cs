@@ -10,6 +10,7 @@ public class GameInput : MonoBehaviour {
         playerInputActions = new PlayerInputActions(); // Instantiates the player input actions.
         playerInputActions.Player.Enable(); // Enables the Player action map, allowing it to start receiving input.
     }
+
     public Vector2 GetMovementDirection() {
          return playerInputActions.Player.Move.ReadValue<Vector2>();
     }
@@ -32,15 +33,12 @@ public class GameInput : MonoBehaviour {
     public bool DashPressed() {
         return playerInputActions.Player.Dash.WasPressedThisFrame();
     }
-
     public bool AttackPressed() {
         return playerInputActions.Player.Attack.WasPressedThisFrame();
     }
-
     public bool InteractPressed() {
         return playerInputActions.Player.Interact.WasPressedThisFrame();
     }
-
     public bool CastPressed() {
         return playerInputActions.Player.Cast.WasPressedThisFrame();
     }

@@ -87,7 +87,6 @@ public class Enemy : MonoBehaviour
         }
         
     }
-
     private void HandleIdleState(float distanceToPlayer) {
         if (distanceToPlayer <= chaseRange) {
             currentState = State.Chase;
@@ -102,7 +101,6 @@ public class Enemy : MonoBehaviour
             Debug.Log("Idle: Switching to Wander state");
         }
     }
-
     private void HandleWanderState(float distanceToPlayer) {
 
         if (distanceToPlayer <= chaseRange) {
@@ -143,7 +141,6 @@ public class Enemy : MonoBehaviour
         }
 
     }
-
     private void HandleChaseState(float distanceToPlayer) {
         // Transition to attack state if within attack range
         if (distanceToPlayer <= attackRange) {
@@ -167,7 +164,6 @@ public class Enemy : MonoBehaviour
             shouldMove = true;
         }
     }
-
     private void HandleAttackState(float distanceToPlayer) {
 
         // Stay stationary while attacking
@@ -248,7 +244,6 @@ public class Enemy : MonoBehaviour
         verticalSpeed = collisionManager.CheckForVerticalCollision(verticalSpeed, transform);
         transform.position += new Vector3(0, verticalSpeed * Time.deltaTime, 0);
     }
-
     public void TakeKnockback(float knockbackForce, Vector2 knockbackDirection) {
         // Normalize the knockback direction and multiply by the knockback force
         Vector2 knockback = knockbackDirection.normalized * knockbackForce;
@@ -257,12 +252,10 @@ public class Enemy : MonoBehaviour
         UpdateHorizontalMovement();
         Debug.Log($"Enemy: Taking knockback with force {knockbackForce} in direction {knockbackDirection}.");
     }
-
     void HandleDeath() {
         Destroy(gameObject);
         Debug.Log("Enemy has died.");
     }
-
     void OnDrawGizmosSelected() {
         Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(initialPosition, wanderRange);

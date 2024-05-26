@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using Cinemachine;
 using UnityEngine;
 using UnityEngine.Animations;
 using UnityEngine.Rendering;
@@ -9,11 +10,12 @@ using UnityEngine.UIElements;
 
 public class Player : MonoBehaviour {
 
-    [SerializeField] private HealthManager healthManager;
-    [SerializeField] private MeleeManager meleeManager;
-    [SerializeField] private SpellManager spellManager;
-    [SerializeField] private CollisionManager collisionManager;
-    [SerializeField] private GameInput gameInput;
+    private HealthManager healthManager;
+    private ManaManager manaManager;
+    private MeleeManager meleeManager;
+    private SpellManager spellManager;
+    private CollisionManager collisionManager;
+    private GameInput gameInput;
     public StatsSO stats;
 
     public enum MovementControls {Platformer, TopDown, Runner}
@@ -44,21 +46,11 @@ public class Player : MonoBehaviour {
     #endregion
 
     void Awake() {
-        
-        TryGetComponent<HealthManager>(out healthManager);
-        if (healthManager != null) {
-            healthManager.OnHealthDepleted += HandleDeath;
-        }
+        InitializeComponents();
 
-        TryGetComponent<MeleeManager>(out meleeManager);
-        TryGetComponent<SpellManager>(out spellManager);
-        TryGetComponent<CollisionManager>(out collisionManager);
-
-
+        var theCam = FindAnyObjectByType<CinemachineVirtualCamera>();
+        theCam.Follow = this.transform;
         if (gameInput == null) gameInput = FindAnyObjectByType<GameInput>();
-    }
-    void Start() {
-        ResetJump();
     }
     void Update() {
         switch (movementControls) {
@@ -77,8 +69,6 @@ public class Player : MonoBehaviour {
             HandleAimingUp();
             break;
         }
-
-
         if (meleeManager != null) {
             HandleMelee();
         }
@@ -86,28 +76,30 @@ public class Player : MonoBehaviour {
             HandleSpellSelect();
             HandleSpellCasting();
         }
-
-        UpdatePosition();
-        
         HandleInteractions();
+        UpdatePosition();
     }
 
-    
-
-    //New Stuff
-    void HandleMelee() {
-        if (gameInput.AttackPressed()) {
-            meleeManager.TryMelee();
+    private void InitializeComponents() {
+        TryGetComponent<HealthManager>(out healthManager);
+        if (healthManager != null) {
+            healthManager.stats = stats;
+            healthManager.OnHealthDepleted += HandleDeath;
         }
+        TryGetComponent<ManaManager>(out manaManager);
+        if (manaManager != null) {
+            manaManager.stats = stats;
+        }
+        TryGetComponent<MeleeManager>(out meleeManager);
+        TryGetComponent<SpellManager>(out spellManager);
+        TryGetComponent<CollisionManager>(out collisionManager);
     }
-
     #region Interactions
     private void HandleInteractions() {
         if (gameInput.InteractPressed()) {
             CheckForInteractable();
         }
     }
-
     private void CheckForInteractable() {
         Collider2D[] hitColliders = Physics2D.OverlapCircleAll(interactPoint.position, interactRadius, interactableLayer);
         foreach (Collider2D hitCollider in hitColliders) {
@@ -116,13 +108,11 @@ public class Player : MonoBehaviour {
             }
         }
     }
-
     void OnDrawGizmosSelected() {
         Gizmos.color = Color.blue;
         Gizmos.DrawWireSphere(interactPoint.position, interactRadius);
     } 
     #endregion
-
     #region Collision and Gravity
     private void CheckGrounded() {
         bool wasGrounded = isGrounded;
@@ -164,7 +154,6 @@ public class Player : MonoBehaviour {
         return collisionManager.CheckForWall();
     }
     #endregion
-
     #region Movement
     private void PlatformerMovement() {
         CheckGrounded();
@@ -263,7 +252,6 @@ public class Player : MonoBehaviour {
         transform.position += new Vector3(0, verticalSpeed * Time.deltaTime, 0);
     }
     #endregion
-
     #region Jump Section
     private void Jump() {
         if (spellManager.IsConcentrating) return;
@@ -313,7 +301,13 @@ public class Player : MonoBehaviour {
         airJumpsLeft = stats.maxAirJumps;
     }
     #endregion
-
+    #region Melee Section
+    void HandleMelee() {
+        if (gameInput.AttackPressed()) {
+            meleeManager.TryMelee();
+        }
+    } 
+    #endregion
     #region SpellCasting Section
     private void HandleAiming360() {
         /* Not Working As Intended 
@@ -325,7 +319,6 @@ public class Player : MonoBehaviour {
         }
         */
     }
-    
     private void HandleAimingUp() {
         if (spellManager.currentSpellInstance?.CanAim == true) {
             float aimDirection = gameInput.GetAimDirection();  // Gets -1, 0, 1
@@ -375,11 +368,6 @@ public class Player : MonoBehaviour {
         }
     }
     #endregion
-
-    private void HandleDeath() {
-        Destroy(gameObject);
-    }
-
     #region Animation Stuff
     private void FlipPlayerSprite() {
         if (!isGrounded) {
@@ -413,4 +401,8 @@ public class Player : MonoBehaviour {
         }
     }
     #endregion
+
+    private void HandleDeath() {
+        Destroy(gameObject);
+    }
 }

@@ -11,7 +11,7 @@ using System.Threading;
 public class SpellManager : MonoBehaviour {
 
     public Transform castPoint;
-    public ManaManager manaManager;
+    private ManaManager manaManager;
 
     [SerializeField] private StandardSpellCombosSO standardSpellCombinations;  // Reference to the standard spell combinations
     [SerializeField] private List<SpellCombinations> customSpellCombinations;
@@ -52,7 +52,6 @@ public class SpellManager : MonoBehaviour {
     }
 
     #region Spell Switching for Player
-
     private void PopulateCustomCombinations() {
         // Create a dictionary for quick lookup of existing custom combinations
         var customCombinationLookup = customSpellCombinations.ToDictionary(combo => (combo.element, combo.school));
@@ -68,7 +67,6 @@ public class SpellManager : MonoBehaviour {
         }
     }
     private void InitializeSpellMap() {
-
         spellInstances = new Dictionary<(Element, School), Spell>();
 
         foreach (var combo in customSpellCombinations) {
@@ -84,8 +82,6 @@ public class SpellManager : MonoBehaviour {
             }
             spellInstances[(combo.element, combo.school)] = spellInstance;
         }
-
-
     }
     private void EnsureValidCurrentSelections() {
 
@@ -106,7 +102,6 @@ public class SpellManager : MonoBehaviour {
     public void HandleElementSelect() {
         CycleElements();
         UpdateCurrentSpell();
-        //InitializeSpellMap();
     }
     public void HandleSchoolSelect() {
         CycleSchools();
@@ -119,14 +114,11 @@ public class SpellManager : MonoBehaviour {
         Element originalElement = currentElement;
         int originalIndex = availableElements.IndexOf(originalElement);
 
-
         // Ensure currentElement is valid
         if (originalIndex == -1) {
             currentElement = availableElements[0];
             originalIndex = 0;
         }
-
-
         for (int i = 1; i <= availableElements.Count; i++) {
             int newIndex = (originalIndex + i) % availableElements.Count;
             Element newElement = availableElements[newIndex];
@@ -151,7 +143,6 @@ public class SpellManager : MonoBehaviour {
             currentSchool = availableSchools[0];
             originalIndex = 0;
         }
-
         for (int i = 1; i <= availableSchools.Count; i++) {
             int newIndex = (originalIndex + i) % availableSchools.Count;
             School newSchool = availableSchools[newIndex];
@@ -166,12 +157,10 @@ public class SpellManager : MonoBehaviour {
         currentSchool = originalSchool;  // Reset to original if no valid combination is found
     }
     private void UpdateCurrentSpell() {
-
         if (availableElements.Count == 0 || availableSchools.Count == 0) {
             currentSpellInstance = null;
             return;
         }
-
         if (spellInstances.TryGetValue((currentElement, currentSchool), out Spell spell)) {
             currentSpellInstance = spell;
         }
@@ -201,9 +190,7 @@ public class SpellManager : MonoBehaviour {
         float casterFacingDirection = Mathf.Sign(castPoint.parent.localScale.x);
         effectTransform.localScale = new Vector3(casterFacingDirection, 1, 1);
     }
-
     #endregion
-
     #region Adding Elements and Schools
     public void AddAvailableElement(Element newElementChoice) {
         if (!availableElements.Contains(newElementChoice)) {
@@ -212,7 +199,6 @@ public class SpellManager : MonoBehaviour {
             UpdateCurrentSpell();
         }
     }
-
     public void AddAvailableSchool(School newSchoolChoice) {
         if (!availableSchools.Contains(newSchoolChoice)) {
             availableSchools.Add(newSchoolChoice);
@@ -221,7 +207,6 @@ public class SpellManager : MonoBehaviour {
         }
     }
     #endregion
-
     #region Casting Methods
     public void CastPressed() {
         currentSpellInstance?.CastPressed();
