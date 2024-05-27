@@ -30,6 +30,9 @@ public class GameInput : MonoBehaviour {
     public bool JumpHeld() {
         return playerInputActions.Player.Jump.IsPressed();
     }
+    public bool JumpReleased() {
+        return playerInputActions.Player.Jump.WasReleasedThisFrame();
+    }
     public bool DashPressed() {
         return playerInputActions.Player.Dash.WasPressedThisFrame();
     }

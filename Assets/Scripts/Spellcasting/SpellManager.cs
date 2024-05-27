@@ -45,7 +45,7 @@ public class SpellManager : MonoBehaviour {
         if (castPoint == null) {
             Debug.LogError("SpellManager error: No child GameObject named 'Cast Point' found. Please ensure there is a GameObject named 'Cast Point' as a child of this component.");
         }
-        manaManager = GetComponentInParent<ManaManager>();
+        TryGetComponent<ManaManager>(out manaManager);
         if (manaManager == null) {
             Debug.LogError("SpellManager error: No ManaManager component found on this GameObject or any of its parents.");
         }

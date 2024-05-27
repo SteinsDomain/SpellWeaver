@@ -10,12 +10,14 @@ public class CollisionManager : MonoBehaviour
     [SerializeField] private float horizontalCastBuffer = 0.01f;
     [SerializeField] private float collisionAdjustmentBuffer = 0.01f;
     [SerializeField] private float wallCheckDistance = 0.1f;
+    [SerializeField] private float slopeCheckDistance = 0.1f;
+    [SerializeField] private float maxSlopeAngle = 45f;
 
     private Collider2D colliderComponent;
 
     private void Awake() {
         collisionLayer = LayerMask.GetMask("Ground");
-        colliderComponent = GetComponent<Collider2D>();
+        TryGetComponent<Collider2D>(out colliderComponent);
         if (colliderComponent == null) {
             Debug.LogError("CollisionManager: No Collider2D component found on " + gameObject.name);
         }
@@ -27,25 +29,7 @@ public class CollisionManager : MonoBehaviour
         float direction = Mathf.Sign(verticalSpeed);
         Vector2 castDirection = Vector2.up * direction;
         float castDistance = Mathf.Abs(verticalSpeed * Time.deltaTime) + verticalCastBuffer;
-        RaycastHit2D hit = default;
-
-        switch (colliderComponent) {
-            case BoxCollider2D box:
-            hit = Physics2D.BoxCast(transform.position, box.size, 0, castDirection, castDistance, collisionLayer);
-            break;
-            case CircleCollider2D circle:
-            hit = Physics2D.CircleCast(transform.position, circle.radius, castDirection, castDistance, collisionLayer);
-            break;
-            case CapsuleCollider2D capsule:
-            hit = Physics2D.CapsuleCast(transform.position, capsule.size, capsule.direction, 0, castDirection, castDistance, collisionLayer);
-            break;
-            case PolygonCollider2D polygon:
-            hit = Physics2D.BoxCast(transform.position, polygon.bounds.size, 0, castDirection, castDistance, collisionLayer);
-            break;
-            default:
-            Debug.LogError("Unsupported collider type: " + colliderComponent.GetType());
-            return verticalSpeed;
-        }
+        RaycastHit2D hit = CastCollider(transform, castDirection, castDistance);
 
         if (hit.collider != null) {
             verticalSpeed = (hit.distance - collisionAdjustmentBuffer) * direction / Time.deltaTime;
@@ -61,32 +45,19 @@ public class CollisionManager : MonoBehaviour
         float direction = Mathf.Sign(horizontalSpeed);
         Vector2 castDirection = Vector2.right * direction;
         float castDistance = Mathf.Abs(horizontalSpeed * Time.deltaTime) + horizontalCastBuffer;
-        RaycastHit2D hit = default;
-
-        switch (colliderComponent) {
-            case BoxCollider2D box:
-            hit = Physics2D.BoxCast(transform.position, box.size, 0, castDirection, castDistance, collisionLayer);
-            break;
-            case CircleCollider2D circle:
-            hit = Physics2D.CircleCast(transform.position, circle.radius, castDirection, castDistance, collisionLayer);
-            break;
-            case CapsuleCollider2D capsule:
-            hit = Physics2D.CapsuleCast(transform.position, capsule.size, capsule.direction, 0, castDirection, castDistance, collisionLayer);
-            break;
-            case PolygonCollider2D polygon:
-            hit = Physics2D.BoxCast(transform.position, polygon.bounds.size, 0, castDirection, castDistance, collisionLayer);
-            break;
-            default:
-            Debug.LogError("Unsupported collider type: " + colliderComponent.GetType());
-            return horizontalSpeed;
-        }
+        RaycastHit2D hit = CastCollider(transform, castDirection, castDistance);
 
         if (hit.collider != null) {
             float slopeAngle = Vector2.Angle(hit.normal, Vector2.up);
 
-            if (slopeAngle <= 45) { // Consider adjusting the threshold based on your game's needs
-                                    // Allow movement along the slope, adjust horizontal speed based on the slope angle
-                horizontalSpeed = Mathf.Cos(slopeAngle * Mathf.Deg2Rad) * horizontalSpeed;
+            if (slopeAngle <= maxSlopeAngle) {
+                // Adjust movement along the slope
+                Vector2 slopeDirection = new Vector2(hit.normal.y, -hit.normal.x);
+                slopeDirection *= direction;
+
+                float adjustedSpeed = horizontalSpeed / Mathf.Cos(slopeAngle * Mathf.Deg2Rad);
+                transform.Translate(slopeDirection.normalized * adjustedSpeed * Time.deltaTime);
+                horizontalSpeed = 0; // Stop horizontal movement as it's handled by the slope adjustment
             }
             else {
                 horizontalSpeed = (hit.distance - collisionAdjustmentBuffer) * direction / Time.deltaTime;
@@ -95,29 +66,27 @@ public class CollisionManager : MonoBehaviour
         return horizontalSpeed;
     }
 
+    private RaycastHit2D CastCollider(Transform transform, Vector2 direction, float distance) {
+        switch (colliderComponent) {
+            case BoxCollider2D box:
+            return Physics2D.BoxCast(transform.position, box.size, 0, direction, distance, collisionLayer);
+            case CircleCollider2D circle:
+            return Physics2D.CircleCast(transform.position, circle.radius, direction, distance, collisionLayer);
+            case CapsuleCollider2D capsule:
+            return Physics2D.CapsuleCast(transform.position, capsule.size, capsule.direction, 0, direction, distance, collisionLayer);
+            case PolygonCollider2D polygon:
+            return Physics2D.BoxCast(transform.position, polygon.bounds.size, 0, direction, distance, collisionLayer);
+            default:
+            Debug.LogError("Unsupported collider type: " + colliderComponent.GetType());
+            return default;
+        }
+    }
+
     public bool CheckIfGrounded(Transform transform, float checkDistance = 0.1f) {
         if (colliderComponent == null) return false;
 
-        Vector2 origin = new Vector2(transform.position.x, transform.position.y - colliderComponent.bounds.extents.y);
-        RaycastHit2D hit = default;
-
-        switch (colliderComponent) {
-            case BoxCollider2D box:
-            hit = Physics2D.BoxCast(origin, new Vector2(box.size.x, 0.1f), 0, Vector2.down, checkDistance, collisionLayer);
-            break;
-            case CircleCollider2D circle:
-            hit = Physics2D.CircleCast(origin, circle.radius, Vector2.down, checkDistance, collisionLayer);
-            break;
-            case CapsuleCollider2D capsule:
-            hit = Physics2D.CapsuleCast(origin, new Vector2(capsule.size.x, 0.1f), capsule.direction, 0, Vector2.down, checkDistance, collisionLayer);
-            break;
-            case PolygonCollider2D polygon:
-            hit = Physics2D.BoxCast(origin, new Vector2(polygon.bounds.size.x, 0.1f), 0, Vector2.down, checkDistance, collisionLayer);
-            break;
-            default:
-            Debug.LogError("Unsupported collider type for grounded check: " + colliderComponent.GetType());
-            return false;
-        }
+        //Vector2 origin = new Vector2(transform.position.x, transform.position.y - colliderComponent.bounds.extents.y);
+        RaycastHit2D hit = CastCollider(transform, Vector2.down, checkDistance);
 
         return hit.collider != null;
     }
@@ -129,7 +98,7 @@ public class CollisionManager : MonoBehaviour
         }
 
         Vector2 direction;
-        RaycastHit2D hit = default;
+        RaycastHit2D hit;
 
         // Apply switch-case for different collider types
         switch (colliderComponent) {

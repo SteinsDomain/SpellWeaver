@@ -37,8 +37,6 @@ public class Player : MonoBehaviour {
     private bool ignoreInput = false;
     #endregion
 
-    //NewStuff
-    
     #region Interaction Variables
     public LayerMask interactableLayer;
     public float interactRadius = 1.0f;
@@ -55,17 +53,17 @@ public class Player : MonoBehaviour {
     void Update() {
         switch (movementControls) {
             case MovementControls.Platformer:
-            PlatformerMovement();
+            HandlePlatformerMovement();
             HandleAimingUp();
             break;
 
             case MovementControls.TopDown:
-            TopDownMovement();
+            HandleTopDownMovement();
             HandleAiming360();
             break;
 
             case MovementControls.Runner:
-            RunnerMovement();
+            HandleRunnerMovement();
             HandleAimingUp();
             break;
         }
@@ -79,7 +77,6 @@ public class Player : MonoBehaviour {
         HandleInteractions();
         UpdatePosition();
     }
-
     private void InitializeComponents() {
         TryGetComponent<HealthManager>(out healthManager);
         if (healthManager != null) {
@@ -94,25 +91,7 @@ public class Player : MonoBehaviour {
         TryGetComponent<SpellManager>(out spellManager);
         TryGetComponent<CollisionManager>(out collisionManager);
     }
-    #region Interactions
-    private void HandleInteractions() {
-        if (gameInput.InteractPressed()) {
-            CheckForInteractable();
-        }
-    }
-    private void CheckForInteractable() {
-        Collider2D[] hitColliders = Physics2D.OverlapCircleAll(interactPoint.position, interactRadius, interactableLayer);
-        foreach (Collider2D hitCollider in hitColliders) {
-            if (hitCollider.TryGetComponent(out IInteractable interactable)){
-                interactable.Interact(gameObject);
-            }
-        }
-    }
-    void OnDrawGizmosSelected() {
-        Gizmos.color = Color.blue;
-        Gizmos.DrawWireSphere(interactPoint.position, interactRadius);
-    } 
-    #endregion
+
     #region Collision and Gravity
     private void CheckGrounded() {
         bool wasGrounded = isGrounded;
@@ -154,8 +133,9 @@ public class Player : MonoBehaviour {
         return collisionManager.CheckForWall();
     }
     #endregion
+
     #region Movement
-    private void PlatformerMovement() {
+    private void HandlePlatformerMovement() {
         CheckGrounded();
         HandleFalling();
         Jump();
@@ -163,14 +143,14 @@ public class Player : MonoBehaviour {
         UpdateHorizontalMovement();
         FlipPlayerSprite();
     }
-    private void TopDownMovement() {
+    private void HandleTopDownMovement() {
         CheckGrounded();
         GetMovementInput();
         UpdateHorizontalMovement();
         UpdateVerticalMovement();
         FlipPlayerSprite();
     }
-    private void RunnerMovement() {
+    private void HandleRunnerMovement() {
         CheckGrounded();
         HandleFalling();
         Jump();
@@ -252,6 +232,7 @@ public class Player : MonoBehaviour {
         transform.position += new Vector3(0, verticalSpeed * Time.deltaTime, 0);
     }
     #endregion
+
     #region Jump Section
     private void Jump() {
         if (spellManager.IsConcentrating) return;
@@ -301,6 +282,27 @@ public class Player : MonoBehaviour {
         airJumpsLeft = stats.maxAirJumps;
     }
     #endregion
+
+    #region Interactions
+    private void HandleInteractions() {
+        if (gameInput.InteractPressed()) {
+            CheckForInteractable();
+        }
+    }
+    private void CheckForInteractable() {
+        Collider2D[] hitColliders = Physics2D.OverlapCircleAll(interactPoint.position, interactRadius, interactableLayer);
+        foreach (Collider2D hitCollider in hitColliders) {
+            if (hitCollider.TryGetComponent(out IInteractable interactable)){
+                interactable.Interact(gameObject);
+            }
+        }
+    }
+    void OnDrawGizmosSelected() {
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireSphere(interactPoint.position, interactRadius);
+    } 
+    #endregion
+
     #region Melee Section
     void HandleMelee() {
         if (gameInput.AttackPressed()) {
@@ -308,6 +310,7 @@ public class Player : MonoBehaviour {
         }
     } 
     #endregion
+
     #region SpellCasting Section
     private void HandleAiming360() {
         /* Not Working As Intended 
@@ -368,6 +371,7 @@ public class Player : MonoBehaviour {
         }
     }
     #endregion
+
     #region Animation Stuff
     private void FlipPlayerSprite() {
         if (!isGrounded) {

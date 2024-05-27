@@ -8,9 +8,8 @@ using UnityEngine.EventSystems;
 
 public class MovementManager : MonoBehaviour
 {
-    public StatsSO stats;
     private GameInput gameInput;
-
+    public StatsSO stats;
     private CollisionManager collisionManager;
     private SpellManager spellManager;
 
@@ -27,15 +26,18 @@ public class MovementManager : MonoBehaviour
     private int airJumpsLeft;
     private bool isWallJumping;
     private bool ignoreInput = false;
-    private bool CanWallJump => CheckForWall() != 0; // If CheckForWall returns anything but 0, a wall jump is possible
+    private bool CanWallJump => CheckForWall() != 0; // If CheckForWall returns anything but 0, a wall jump is possible 
 
     private void Awake() {
         TryGetComponent<SpellManager>(out spellManager);
         TryGetComponent<CollisionManager>(out collisionManager);
+
         if (gameInput == null) gameInput = FindAnyObjectByType<GameInput>();
+
     }
 
     private void Update() {
+
         switch (movementControls) {
             case MovementControls.Platformer:
             PlatformerMovement();
@@ -49,7 +51,6 @@ public class MovementManager : MonoBehaviour
             RunnerMovement();
             break;
         }
-
         UpdatePosition();
     }
 
@@ -156,6 +157,7 @@ public class MovementManager : MonoBehaviour
         if (isGrounded && moveDirection.x == 0) {
             horizontalSpeed = Mathf.MoveTowards(horizontalSpeed, 0f, stats.groundSpeed * Time.deltaTime / stats.groundDecelerationTime);
         }
+
     }
     private void UpdateVerticalMovement() {
         if (!spellManager.IsConcentrating && !ignoreInput) {
@@ -184,7 +186,10 @@ public class MovementManager : MonoBehaviour
         if (isGrounded && moveDirection.x == 0) {
             verticalSpeed = Mathf.MoveTowards(verticalSpeed, 0f, stats.groundSpeed * Time.deltaTime / stats.groundDecelerationTime);
         }
+
+
     }
+
     private void UpdatePosition() {
         horizontalSpeed = collisionManager.CheckForHorizontalCollision(horizontalSpeed, transform);
         transform.position += new Vector3(horizontalSpeed * Time.deltaTime, 0, 0);
@@ -240,7 +245,6 @@ public class MovementManager : MonoBehaviour
         airJumpsLeft = stats.maxAirJumps;
     }
     #endregion
-
     private void FlipPlayerSprite() {
         if (!isGrounded) {
             int wallDirection = CheckForWall();
@@ -271,5 +275,5 @@ public class MovementManager : MonoBehaviour
             }
             transform.localScale = new Vector3(isFacingRight ? 1 : -1, 1, 1);
         }
-    }
+    } 
 }
