@@ -20,8 +20,7 @@ public class ProjectileSpell : Spell {
         }
         else if (TryToCast()) {
             Debug.Log("Casting new projectile.");
-            FireProjectile(projectileSpell);
-            //CastProjectileSpell();
+            FireProjectiles(projectileSpell);         
         }
     }
 
@@ -31,8 +30,7 @@ public class ProjectileSpell : Spell {
 
         if (projectileSpell.shotType == ProjectileSpellData.ShotType.Auto && TryToCast()) {
             Debug.Log("Continuously casting projectile.");
-            FireProjectile(projectileSpell);
-
+            FireProjectiles(projectileSpell);
         }
     }
 
@@ -42,9 +40,35 @@ public class ProjectileSpell : Spell {
         }
     }
 
-    private void FireProjectile(ProjectileSpellData projectileSpell) {
+    private void FireProjectiles(ProjectileSpellData projectileSpell) {
+        if (projectileSpell.shotsPerCast == 1)
+        {
+            // If there's only one projectile, no need to calculate spread.
+            Vector3 direction = castPoint.up;
+            float randomAngle = Random.Range(-projectileSpell.projectileAccuracy, projectileSpell.projectileAccuracy);
+            direction = Quaternion.Euler(0, 0, randomAngle) * direction;
+            FireProjectile(projectileSpell, direction);
+        }
+        else
+        {
+            float totalSpread = projectileSpell.maxSpread;
+            float spreadIncrement = totalSpread / (projectileSpell.shotsPerCast - 1);
+
+            for (int i = 0; i < projectileSpell.shotsPerCast; i++)
+            {
+                float baseAngle = -totalSpread / 2 + spreadIncrement * i;
+                float randomAngle = Random.Range(-projectileSpell.projectileAccuracy, projectileSpell.projectileAccuracy);
+                float finalAngle = baseAngle + randomAngle;
+
+                Vector3 direction = Quaternion.Euler(0, 0, finalAngle) * castPoint.up;
+                FireProjectile(projectileSpell, direction);
+            }
+        }
+    }
+
+    private void FireProjectile(ProjectileSpellData projectileSpell, Vector3 direction) {
         GameObject projectile = Instantiate(projectileSpell.projectilePrefab, castPoint.position, Quaternion.identity);
-        projectile.transform.rotation = Quaternion.FromToRotation(Vector3.up, castPoint.up);
+        projectile.transform.rotation = Quaternion.FromToRotation(Vector3.up, direction);
         float scale = castPoint.parent.localScale.x > 0 ? 1 : -1;
         projectile.transform.localScale = new Vector3(scale, 1, 1);
 

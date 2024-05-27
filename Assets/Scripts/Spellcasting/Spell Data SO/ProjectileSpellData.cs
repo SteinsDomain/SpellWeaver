@@ -10,7 +10,6 @@ public class ProjectileSpellData : SpellData {
     public enum ShotType {
         Single,  // Represents a single shot per trigger pull
         Auto,    // Represents fully automatic fire
-        Burst,   // Represents burst firing mode (e.g., 3 shots per trigger pull)
         Charge,  // Represents charge-up shots (e.g., charging before firing)
     }
 
@@ -34,10 +33,6 @@ public class ProjectileSpellData : SpellData {
     public float explosionKnockbackForce;
     public int explosionDamage;
 
-    //only for Burst shots
-    public int shotsPerBurst;
-    public float burstShotDelay;
-
     //only used for Single and Charge shots
     public bool isDetonatable;
 
@@ -45,4 +40,9 @@ public class ProjectileSpellData : SpellData {
     public float chargeTime;
     public float minimumChargeNeeded;
     public float chargeBoostAmount;
+
+    // New variables
+    public int shotsPerCast = 1;
+    public float projectileAccuracy = 1.0f;
+    public float maxSpread = 30.0f;  // Maximum spread angle in degrees
 }
