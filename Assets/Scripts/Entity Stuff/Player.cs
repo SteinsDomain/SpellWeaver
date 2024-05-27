@@ -226,9 +226,8 @@ public class Player : MonoBehaviour {
         }
     }
     private void UpdatePosition() {
-        horizontalSpeed = collisionManager.CheckForHorizontalCollision(horizontalSpeed, transform);
         verticalSpeed = collisionManager.CheckForVerticalCollision(verticalSpeed, transform);
-
+        horizontalSpeed = collisionManager.CheckForHorizontalCollision(horizontalSpeed, transform);
         transform.position += new Vector3(horizontalSpeed * Time.deltaTime, verticalSpeed * Time.deltaTime, 0);
     }
     #endregion

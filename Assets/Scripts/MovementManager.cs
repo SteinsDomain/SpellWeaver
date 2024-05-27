@@ -190,11 +190,11 @@ public class MovementManager : MonoBehaviour
 
     }
 
-    private void UpdatePosition() {
+    private void UpdatePosition()
+    {
         horizontalSpeed = collisionManager.CheckForHorizontalCollision(horizontalSpeed, transform);
-        transform.position += new Vector3(horizontalSpeed * Time.deltaTime, 0, 0);
         verticalSpeed = collisionManager.CheckForVerticalCollision(verticalSpeed, transform);
-        transform.position += new Vector3(0, verticalSpeed * Time.deltaTime, 0);
+        transform.position += new Vector3(horizontalSpeed * Time.deltaTime, verticalSpeed * Time.deltaTime, 0);
     }
     #endregion
     #region Jump Section
