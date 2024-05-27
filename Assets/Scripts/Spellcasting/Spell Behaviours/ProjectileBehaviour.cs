@@ -28,10 +28,62 @@ public class ProjectileBehaviour : MonoBehaviour {
     }
 
     private void HandleMovement() {
-        float moveSpeed = Time.deltaTime * spellData.projectileSpeed * (transform.localScale.x > 0 ? 1 : -1);
-        float adjustedHorizontalSpeed = collisionManager?.CheckForHorizontalCollision(moveSpeed, transform) ?? moveSpeed;
-        transform.Translate(new Vector3(adjustedHorizontalSpeed, 0, 0), Space.Self);
+        float moveSpeed = spellData.projectileSpeed * Time.deltaTime * (transform.localScale.x > 0 ? 1 : -1);
+        Vector3 moveDirection = transform.right * moveSpeed;
+        HandleCollision(moveDirection);
     }
+
+    private void HandleCollision(Vector3 moveDirection)
+    {
+        Vector2 currentPosition = transform.position;
+        Vector2 nextPosition = currentPosition + (Vector2)moveDirection;
+
+        RaycastHit2D hit = Physics2D.Raycast(currentPosition, moveDirection, moveDirection.magnitude, LayerMask.GetMask("Ground"));
+        Debug.DrawRay(currentPosition, moveDirection, Color.red);
+
+        if (hit.collider != null)
+        {
+            Debug.Log("ProjectileBehaviour: Collision detected with " + hit.collider.name);
+            transform.position = hit.point;
+            OnCollision(hit.collider);
+        }
+        else
+        {
+            transform.position = nextPosition;
+        }
+    }
+
+    private void OnCollision(Collider2D collision)
+    {
+        if (spellData.isExplosive)
+        {
+            Explode();
+            return;
+        }
+
+        if (ShouldAffectTarget(collision.gameObject))
+        {
+            Debug.Log("ProjectileBehaviour: Processing impact with " + collision.gameObject.name);
+            HealthManager healthManager = collision.gameObject.GetComponent<HealthManager>();
+            if (healthManager != null)
+            {
+                healthManager.TakeDamage(spellData.projectileDamage);
+                Vector2 knockbackDirection = (collision.transform.position - transform.position).normalized;
+                ApplyProjectileKnockback(collision.transform, spellData.projectileKnockback, knockbackDirection);
+                Debug.Log("ProjectileBehaviour: Applied " + spellData.projectileDamage + " damage and knockback to " + collision.gameObject.name);
+            }
+
+            if (spellData.hitEffect != null)
+            {
+                Instantiate(spellData.hitEffect, collision.transform.position, Quaternion.identity);
+                Debug.Log("ProjectileBehaviour: Hit effect instantiated.");
+            }
+
+            Destroy(gameObject);
+            Debug.Log("ProjectileBehaviour: Projectile destroyed after impact.");
+        }
+    }
+
     private void CheckOutOfRange() {
         if (travelDistance > spellData.maxProjectileRange) {
             Debug.Log("ProjectileBehaviour: Projectile exceeded max range. Destroying.");

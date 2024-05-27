@@ -16,7 +16,7 @@ MonoBehaviour:
   mpCost: 1
   manaDrainRate: 0
   mpRegenCooldown: 3
-  castsPerSecond: 6
+  castsPerSecond: 15
   requiresConcentration: 0
   canAim: 1
   shotType: 0
