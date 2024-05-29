@@ -20,6 +20,7 @@ MonoBehaviour:
   requiresConcentration: 0
   canAim: 1
   shotType: 0
+  shotDirection: 1
   projectilePrefab: {fileID: 3082819435468633395, guid: 52f558099c29a35409fd78264902e86a, type: 3}
   explosionPrefab: {fileID: 0}
   hitEffect: {fileID: 7342286864558875182, guid: bfaf5e99cf87671448fbd08c4de83b45, type: 3}
@@ -39,4 +40,4 @@ MonoBehaviour:
   chargeBoostAmount: 0
   shotsPerCast: 1
   projectileAccuracy: 0
-  maxSpread: 0
+  maxSpread: 1

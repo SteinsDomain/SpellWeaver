@@ -4,11 +4,7 @@ using UnityEngine;
 
 public class ProjectileSpell : Spell {
 
-    public ProjectileSpell(Transform castPoint, ManaManager manaManager, SpellData spellData)
-        : base(castPoint, manaManager, spellData) { }
-
     private GameObject currentDetonatableProjectile;
-
 
     public override void CastPressed() {
         var projectileSpell = spellData as ProjectileSpellData;
@@ -47,27 +43,40 @@ public class ProjectileSpell : Spell {
             Vector3 direction = castPoint.up;
             float randomAngle = Random.Range(-projectileSpell.projectileAccuracy, projectileSpell.projectileAccuracy);
             direction = Quaternion.Euler(0, 0, randomAngle) * direction;
-            FireProjectile(projectileSpell, direction);
+            FireProjectile(projectileSpell, castPoint.position, direction);
         }
         else
         {
             float totalSpread = projectileSpell.maxSpread;
-            float spreadIncrement = totalSpread / (projectileSpell.shotsPerCast - 1);
+            float spreadIncrement = projectileSpell.shotsPerCast > 1 ? totalSpread / (projectileSpell.shotsPerCast - 1) : 0;
+            float halfSpread = totalSpread / 2;
 
             for (int i = 0; i < projectileSpell.shotsPerCast; i++)
             {
-                float baseAngle = -totalSpread / 2 + spreadIncrement * i;
-                float randomAngle = Random.Range(-projectileSpell.projectileAccuracy, projectileSpell.projectileAccuracy);
-                float finalAngle = baseAngle + randomAngle;
+                float baseOffset = -halfSpread + spreadIncrement * i;
 
-                Vector3 direction = Quaternion.Euler(0, 0, finalAngle) * castPoint.up;
-                FireProjectile(projectileSpell, direction);
+
+                if (projectileSpell.shotDirection == ProjectileSpellData.ShotDirection.Arc) {
+                    float randomAngle = Random.Range(-projectileSpell.projectileAccuracy, projectileSpell.projectileAccuracy);
+                    float finalAngle = baseOffset + randomAngle;
+                    Vector3 direction = Quaternion.Euler(0, 0, finalAngle) * castPoint.up;
+                    FireProjectile(projectileSpell, castPoint.position, direction);
+                }
+                else { // Straight path
+                    Vector3 offset = castPoint.up * baseOffset;
+                    Vector3 startPosition = castPoint.position + offset;
+                    Vector3 direction = castPoint.up;
+                    float randomAngle = Random.Range(-projectileSpell.projectileAccuracy, projectileSpell.projectileAccuracy);
+                    direction = Quaternion.Euler(0, 0, randomAngle) * direction;
+
+                    FireProjectile(projectileSpell, startPosition, direction);
+                }
             }
         }
     }
 
-    private void FireProjectile(ProjectileSpellData projectileSpell, Vector3 direction) {
-        GameObject projectile = Instantiate(projectileSpell.projectilePrefab, castPoint.position, Quaternion.identity);
+    private void FireProjectile(ProjectileSpellData projectileSpell, Vector3 startPosition, Vector3 direction) {
+        GameObject projectile = Instantiate(projectileSpell.projectilePrefab, startPosition, Quaternion.identity);
         projectile.transform.rotation = Quaternion.FromToRotation(Vector3.up, direction);
         float scale = castPoint.parent.localScale.x > 0 ? 1 : -1;
         projectile.transform.localScale = new Vector3(scale, 1, 1);

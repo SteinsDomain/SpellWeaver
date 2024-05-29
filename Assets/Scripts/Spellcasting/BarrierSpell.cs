@@ -4,9 +4,6 @@ using UnityEngine;
 
 public class BarrierSpell : Spell {
 
-    public BarrierSpell(Transform castPoint, ManaManager manaManager, SpellData spellData)
-        : base(castPoint, manaManager, spellData) { }
-
     private static GameObject currentBarrier;
     private bool isRepressed = false;
 

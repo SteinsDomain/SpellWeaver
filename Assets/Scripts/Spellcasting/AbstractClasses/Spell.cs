@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,11 +11,7 @@ public abstract class Spell : MonoBehaviour {
     private Coroutine manaDrainCoroutine;
     private bool isManaDraining;
 
-    public Spell(Transform castPoint, ManaManager manaManager, SpellData spellData) {
-        this.castPoint = castPoint;
-        this.manaManager = manaManager;
-        this.spellData = spellData;
-    }
+    
     public virtual bool CanAim => spellData.canAim;
 
     public abstract void CastPressed();
@@ -80,5 +77,23 @@ public abstract class Spell : MonoBehaviour {
             Debug.Log("Mana Drain Coroutine stopped.");
             manaManager.StartCoroutine(manaManager.RegenerationDelay(spellData.mpRegenCooldown));  // Ensure mana regeneration starts after drain stops
         }
+    }
+
+    public static Spell CreateSpell(SpellData spellData, Transform castPoint, ManaManager manaManager) {
+        if (spellData is ProjectileSpellData) {
+            return castPoint.gameObject.AddComponent<ProjectileSpell>().Initialize(castPoint, manaManager, spellData);
+        }
+        if (spellData is BarrierSpellData) {
+            return castPoint.gameObject.AddComponent<BarrierSpell>().Initialize(castPoint, manaManager, spellData);
+        }
+
+        throw new ArgumentException("Unknown SpellData type");
+    }
+
+    public virtual Spell Initialize(Transform castPoint, ManaManager manaManager, SpellData spellData) {
+        this.castPoint = castPoint;
+        this.manaManager = manaManager;
+        this.spellData = spellData;
+        return this;
     }
 }

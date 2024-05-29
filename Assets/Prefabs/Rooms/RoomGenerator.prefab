@@ -44,13 +44,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a72b4f8c537baf4f96cc583791ba5ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  roomWidth: 100
-  roomHeight: 30
+  roomWidth: 50
+  roomHeight: 50
   tilemap: {fileID: 0}
   groundTile: {fileID: 11400000, guid: eb6a3161758572b4dbbe0f888015dd9d, type: 2}
   hasCeiling: 0
-  ceilingHeight: 8
+  ceilingHeight: 50
   capEnds: 0
-  startGroundLevel: 5
-  groundVariation: 4
+  startGroundLevel: 33
+  groundVariation: 3
   smoothness: 0.07

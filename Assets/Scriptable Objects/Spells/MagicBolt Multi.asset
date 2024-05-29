@@ -13,21 +13,22 @@ MonoBehaviour:
   m_Name: MagicBolt Multi
   m_EditorClassIdentifier: 
   spellName: Magic Bolt
-  mpCost: 1
+  mpCost: 5
   manaDrainRate: 0
   mpRegenCooldown: 3
   castsPerSecond: 6
   requiresConcentration: 0
   canAim: 1
-  shotType: 0
+  shotType: 1
+  shotDirection: 1
   projectilePrefab: {fileID: 3082819435468633395, guid: 52f558099c29a35409fd78264902e86a, type: 3}
   explosionPrefab: {fileID: 0}
   hitEffect: {fileID: 7342286864558875182, guid: bfaf5e99cf87671448fbd08c4de83b45, type: 3}
-  projectileSpeed: 15
+  projectileSpeed: 50
   projectileKnockback: 0
   projectileRecoil: 0
   projectileDamage: 10
-  maxProjectileRange: 5
+  maxProjectileRange: 30
   isExplosive: 0
   explosionDelay: 0
   explosionSize: 0
@@ -39,4 +40,4 @@ MonoBehaviour:
   chargeBoostAmount: 0
   shotsPerCast: 3
   projectileAccuracy: 0
-  maxSpread: 15
+  maxSpread: 1

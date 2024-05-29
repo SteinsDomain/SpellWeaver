@@ -13,9 +13,15 @@ public class ProjectileSpellData : SpellData {
         Charge,  // Represents charge-up shots (e.g., charging before firing)
     }
 
+    public enum ShotDirection {
+        Arc,
+        Straight
+    }
+
     [Header("Projectile Spell Properties")]
 
     public ShotType shotType;
+    public ShotDirection shotDirection;
 
     public GameObject projectilePrefab;
     public GameObject explosionPrefab;

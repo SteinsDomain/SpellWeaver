@@ -67,50 +67,53 @@ public class SpellManager : MonoBehaviour {
         }
     }
     private void InitializeSpellMap() {
+
+        //Cleanup for old spells, mostly for testing in case changed in inspector
+        Spell[] existingSpells = castPoint.GetComponents<Spell>();
+        foreach (Spell spell in existingSpells) {
+            spellInstances.Clear();
+            Destroy(spell);
+        }
         spellInstances = new Dictionary<(Element, School), Spell>();
 
         foreach (var combo in customSpellCombinations) {
-            Spell spellInstance;
-            if (combo.spell is ProjectileSpellData) {
-                spellInstance = new ProjectileSpell(castPoint, manaManager, combo.spell);
-            }
-            else if (combo.spell is BarrierSpellData) {
-                spellInstance = new BarrierSpell(castPoint, manaManager, combo.spell);
-            }
-            else {
-                continue;
-            }
+            Spell spellInstance = Spell.CreateSpell(combo.spell, castPoint, manaManager);
             spellInstances[(combo.element, combo.school)] = spellInstance;
         }
     }
     private void EnsureValidCurrentSelections() {
 
         if (availableElements.Count == 0) {
-            currentElement = default(Element); // Handle empty list scenario
+            currentElement = default; // Handle empty list scenario
         }
         else if (!availableElements.Contains(currentElement)) {
             currentElement = availableElements.First();
         }
 
         if (availableSchools.Count == 0) {
-            currentSchool = default(School); // Handle empty list scenario
+            currentSchool = default; // Handle empty list scenario
         }
         else if (!availableSchools.Contains(currentSchool)) {
             currentSchool = availableSchools.First();
         }
     }
     public void HandleElementSelect() {
+        PopulateCustomCombinations(); //called again in case changed in inspector
+        InitializeSpellMap(); //called again in case changed in inspector
+
         CycleElements();
         UpdateCurrentSpell();
     }
     public void HandleSchoolSelect() {
+        PopulateCustomCombinations(); //called again in case changed in inspector
+        InitializeSpellMap(); //called again in case changed in inspector
+
         CycleSchools();
         UpdateCurrentSpell();
-        //InitializeSpellMap();
     }
     private void CycleElements() {
         if (availableElements.Count == 0) return;
-
+        
         Element originalElement = currentElement;
         int originalIndex = availableElements.IndexOf(originalElement);
 
@@ -134,7 +137,7 @@ public class SpellManager : MonoBehaviour {
     }
     private void CycleSchools() {
         if (availableSchools.Count == 0) return;
-
+        
         School originalSchool = currentSchool;
         int originalIndex = availableSchools.IndexOf(originalSchool);
 

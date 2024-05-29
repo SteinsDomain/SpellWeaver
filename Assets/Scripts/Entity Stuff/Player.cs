@@ -18,6 +18,9 @@ public class Player : MonoBehaviour {
     private GameInput gameInput;
     public StatsSO stats;
 
+
+    public SimpleSpellList mySpellList;
+
     public enum MovementControls {Platformer, TopDown, Runner}
     public MovementControls movementControls;
 
@@ -74,6 +77,9 @@ public class Player : MonoBehaviour {
             HandleSpellSelect();
             HandleSpellCasting();
         }
+        if (mySpellList != null) {
+            HandleSimpleCasting();
+        }
         HandleInteractions();
         UpdatePosition();
     }
@@ -90,6 +96,7 @@ public class Player : MonoBehaviour {
         TryGetComponent<MeleeManager>(out meleeManager);
         TryGetComponent<SpellManager>(out spellManager);
         TryGetComponent<CollisionManager>(out collisionManager);
+        TryGetComponent<SimpleSpellList>(out mySpellList);
     }
 
     #region Collision and Gravity
@@ -404,6 +411,20 @@ public class Player : MonoBehaviour {
         }
     }
     #endregion
+
+    private void HandleSimpleCasting() {
+        if (gameInput.CastPressed()) {
+            mySpellList.CastPressed();
+        }
+
+        if (gameInput.CastHeld()) {
+            mySpellList.CastHeld();
+        }
+
+        if (gameInput.CastReleased()) {
+            mySpellList.CastReleased();
+        }
+    }
 
     private void HandleDeath() {
         Destroy(gameObject);
