@@ -36,7 +36,7 @@ public class Player : MonoBehaviour {
     private bool isWallJumping;
     private bool isAimingUp;
     private bool isAimingDown;
-    private bool CanWallJump => CheckForWall() != 0; // If CheckForWall returns anything but 0, a wall jump is possible
+    private bool CanWallJump => collisionManager.CheckForWall() != 0; // If CheckForWall returns anything but 0, a wall jump is possible
     private bool ignoreInput = false;
     #endregion
 
@@ -114,7 +114,7 @@ public class Player : MonoBehaviour {
         ResetJump();
     }
     private void HandleFalling() {
-        bool isWallSliding = CheckForWall() != 0 && !isGrounded && verticalSpeed < 0;
+        bool isWallSliding = collisionManager.CheckForWall() != 0 && !isGrounded && verticalSpeed < 0;
         if (!isGrounded) {
             if (isWallSliding) {
                 ApplyGravity(stats.wallSlideGravityMod);
@@ -135,9 +135,6 @@ public class Player : MonoBehaviour {
     }
     private void ApplyGravity(float modifier = 1f) {
         verticalSpeed -= (stats.gravity * modifier) * Time.deltaTime;
-    }
-    private int CheckForWall() {
-        return collisionManager.CheckForWall();
     }
     #endregion
 
@@ -263,7 +260,7 @@ public class Player : MonoBehaviour {
         }
     }
     private void WallJump() {
-        int wallDirection = CheckForWall();
+        int wallDirection = collisionManager.CheckForWall();
 
         if (wallDirection != 0) {
             Vector2 jumpDirection = new Vector2(stats.wallJumpDirection.x * -wallDirection, stats.wallJumpDirection.y);
@@ -381,7 +378,7 @@ public class Player : MonoBehaviour {
     #region Animation Stuff
     private void FlipPlayerSprite() {
         if (!isGrounded) {
-            int wallDirection = CheckForWall();
+            int wallDirection = collisionManager.CheckForWall();
             if (wallDirection != 0) { //if we're touching a wall on either side while airborne
                 isFacingRight = wallDirection == -1; //Face away from the wall
             }

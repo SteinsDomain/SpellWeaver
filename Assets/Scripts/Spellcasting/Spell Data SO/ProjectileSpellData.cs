@@ -51,4 +51,8 @@ public class ProjectileSpellData : SpellData {
     public int shotsPerCast = 1;
     public float projectileAccuracy = 1.0f;
     public float maxSpread = 30.0f;  // Maximum spread angle in degrees
+
+
+    public float screenShakeAmount = 0.5f;
+    public AudioClip castSound;
 }

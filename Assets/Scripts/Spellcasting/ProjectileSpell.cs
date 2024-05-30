@@ -1,10 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
+using Cinemachine;
 using UnityEngine;
 
 public class ProjectileSpell : Spell {
 
     private GameObject currentDetonatableProjectile;
+
+    private void Awake() {
+    }
 
     public override void CastPressed() {
         var projectileSpell = spellData as ProjectileSpellData;
@@ -16,7 +20,8 @@ public class ProjectileSpell : Spell {
         }
         else if (TryToCast()) {
             Debug.Log("Casting new projectile.");
-            FireProjectiles(projectileSpell);         
+            FireProjectiles(projectileSpell);
+            AudioSource.PlayClipAtPoint(projectileSpell.castSound, Vector3.zero);
         }
     }
 
@@ -27,6 +32,8 @@ public class ProjectileSpell : Spell {
         if (projectileSpell.shotType == ProjectileSpellData.ShotType.Auto && TryToCast()) {
             Debug.Log("Continuously casting projectile.");
             FireProjectiles(projectileSpell);
+            AudioSource.PlayClipAtPoint(projectileSpell.castSound, Vector3.zero);
+
         }
     }
 
@@ -44,6 +51,7 @@ public class ProjectileSpell : Spell {
             float randomAngle = Random.Range(-projectileSpell.projectileAccuracy, projectileSpell.projectileAccuracy);
             direction = Quaternion.Euler(0, 0, randomAngle) * direction;
             FireProjectile(projectileSpell, castPoint.position, direction);
+            
         }
         else
         {
@@ -84,6 +92,10 @@ public class ProjectileSpell : Spell {
         if (castPoint.parent != null) {
             if (castPoint.parent.CompareTag("Player")) {
                 projectile.layer = LayerMask.NameToLayer("Player Projectiles");
+
+                //Screen Shake for player only 
+                CinemachineShake.Instance.ShakeCamera(projectileSpell.screenShakeAmount, .1f);
+
                 Debug.Log("Assigned to Player Projectiles layer.");
             }
             else if (castPoint.parent.CompareTag("Enemy")) {

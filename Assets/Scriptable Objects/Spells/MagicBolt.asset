@@ -40,4 +40,6 @@ MonoBehaviour:
   chargeBoostAmount: 0
   shotsPerCast: 1
   projectileAccuracy: 0
-  maxSpread: 1
+  maxSpread: 0
+  screenShakeAmount: 0.5
+  castSound: {fileID: 8300000, guid: 584af4cf30b03034fabca2aacb8db426, type: 3}
