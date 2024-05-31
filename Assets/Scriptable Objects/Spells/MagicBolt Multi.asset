@@ -19,8 +19,10 @@ MonoBehaviour:
   castsPerSecond: 6
   requiresConcentration: 0
   canAim: 1
+  castSound: {fileID: 8300000, guid: 584af4cf30b03034fabca2aacb8db426, type: 3}
+  castEffect: {fileID: 7342286864558875182, guid: da015dc90059e144380d699d45810215, type: 3}
   shotType: 0
-  shotDirection: 1
+  shotDirection: 0
   projectilePrefab: {fileID: 3082819435468633395, guid: 52f558099c29a35409fd78264902e86a, type: 3}
   explosionPrefab: {fileID: 0}
   hitEffect: {fileID: 7342286864558875182, guid: bfaf5e99cf87671448fbd08c4de83b45, type: 3}
@@ -28,7 +30,7 @@ MonoBehaviour:
   projectileKnockback: 0
   projectileRecoil: 0
   projectileDamage: 10
-  maxProjectileRange: 30
+  maxProjectileRange: 10
   isExplosive: 0
   explosionDelay: 0
   explosionSize: 0
@@ -40,6 +42,5 @@ MonoBehaviour:
   chargeBoostAmount: 0
   shotsPerCast: 3
   projectileAccuracy: 0
-  maxSpread: 1
-  screenShakeAmount: 2
-  castSound: {fileID: 8300000, guid: 584af4cf30b03034fabca2aacb8db426, type: 3}
+  maxSpread: 15
+  screenShakeAmount: 1

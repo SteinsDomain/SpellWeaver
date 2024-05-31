@@ -10,6 +10,7 @@ public class HealthManager : MonoBehaviour
 
     public delegate void HealthDepletedAction();
     public event HealthDepletedAction OnHealthDepleted;
+    public ParticleSystem damageEffect;
 
     void Awake() {
         if (stats != null) {
@@ -24,6 +25,11 @@ public class HealthManager : MonoBehaviour
     public void TakeDamage(int damage) {
         currentHP -= damage;
         currentHP = Mathf.Max(currentHP, 0);
+
+        if (damageEffect != null) {
+            Instantiate(damageEffect, transform.position, Quaternion.identity, transform);
+
+        }
         if (currentHP <= 0) {
             currentHP = 0;
             if (OnHealthDepleted != null) {

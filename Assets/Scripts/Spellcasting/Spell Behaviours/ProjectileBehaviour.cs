@@ -29,14 +29,14 @@ public class ProjectileBehaviour : MonoBehaviour {
 
     private void HandleMovement() {
         float moveSpeed = spellData.projectileSpeed * Time.deltaTime * (transform.localScale.x > 0 ? 1 : -1);
-        Vector3 moveDirection = transform.right * moveSpeed;
+        Vector2 moveDirection = transform.right * moveSpeed;
         HandleCollision(moveDirection);
     }
 
-    private void HandleCollision(Vector3 moveDirection)
+    private void HandleCollision(Vector2 moveDirection)
     {
         Vector2 currentPosition = transform.position;
-        Vector2 nextPosition = currentPosition + (Vector2)moveDirection;
+        Vector2 nextPosition = currentPosition + moveDirection;
 
         RaycastHit2D hit = Physics2D.Raycast(currentPosition, moveDirection, moveDirection.magnitude, LayerMask.GetMask("Ground"));
         Debug.DrawRay(currentPosition, moveDirection, Color.red);

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4154b5d8fecf42b46b8c465e38d847c1, type: 3}
   m_Name: FuckBoiStats
   m_EditorClassIdentifier: 
-  maxHP: 30
+  maxHP: 1
   hpRegenRate: 0
   maxMP: 2147483647
   mpRegenAmount: 0

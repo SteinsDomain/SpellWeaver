@@ -13,4 +13,7 @@ public abstract class SpellData : ScriptableObject{
     [Min(.01f)]public float castsPerSecond = 1f;
     public bool requiresConcentration = false;
     public bool canAim;
+
+    public AudioClip castSound;
+    public ParticleSystem castEffect;
 }

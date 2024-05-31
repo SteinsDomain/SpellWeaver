@@ -21,7 +21,9 @@ public class SpellManager : MonoBehaviour {
     public Spell currentSpellInstance;
 
     public enum Element { Arcane, Fire, Ice, Thunder, Earth }
-    public enum School { Evoke, Conjure }
+    public enum School { Projectile, Barrier }
+
+
     [SerializeField] private List<Element> availableElements;
     [SerializeField] private List<School> availableSchools;
     public Element currentElement;
@@ -62,7 +64,9 @@ public class SpellManager : MonoBehaviour {
 
             // If the custom combinations do not already contain this standard combination, add it
             if (!customCombinationLookup.ContainsKey(key)) {
-                customSpellCombinations.Add(standardCombo);
+                // Create a new instance of SpellCombinations to avoid referencing the same object
+                var newCombo = new SpellCombinations(standardCombo.element, standardCombo.school, standardCombo.spell);
+                customSpellCombinations.Add(newCombo);
             }
         }
     }

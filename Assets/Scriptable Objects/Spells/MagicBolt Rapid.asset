@@ -1,0 +1,46 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0146f9a4d9f3a8444a00f3ddb27ccbe1, type: 3}
+  m_Name: MagicBolt Rapid
+  m_EditorClassIdentifier: 
+  spellName: Magic Bolt Rapid
+  mpCost: 2
+  manaDrainRate: 0
+  mpRegenCooldown: 3
+  castsPerSecond: 10
+  requiresConcentration: 0
+  canAim: 1
+  castSound: {fileID: 8300000, guid: 584af4cf30b03034fabca2aacb8db426, type: 3}
+  castEffect: {fileID: 7342286864558875182, guid: da015dc90059e144380d699d45810215, type: 3}
+  shotType: 1
+  shotDirection: 1
+  projectilePrefab: {fileID: 3082819435468633395, guid: 52f558099c29a35409fd78264902e86a, type: 3}
+  explosionPrefab: {fileID: 0}
+  hitEffect: {fileID: 7342286864558875182, guid: bfaf5e99cf87671448fbd08c4de83b45, type: 3}
+  projectileSpeed: 100
+  projectileKnockback: 0
+  projectileRecoil: 0
+  projectileDamage: 3
+  maxProjectileRange: 20
+  isExplosive: 0
+  explosionDelay: 0
+  explosionSize: 0
+  explosionKnockbackForce: 0
+  explosionDamage: 0
+  isDetonatable: 0
+  chargeTime: 0
+  minimumChargeNeeded: 0
+  chargeBoostAmount: 0
+  shotsPerCast: 1
+  projectileAccuracy: 0
+  maxSpread: 0
+  screenShakeAmount: 0.5

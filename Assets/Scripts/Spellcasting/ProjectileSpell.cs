@@ -22,6 +22,7 @@ public class ProjectileSpell : Spell {
             Debug.Log("Casting new projectile.");
             FireProjectiles(projectileSpell);
             AudioSource.PlayClipAtPoint(projectileSpell.castSound, Vector3.zero);
+            Instantiate(spellData.castEffect, castPoint.position, Quaternion.identity, castPoint);
         }
     }
 
@@ -33,7 +34,7 @@ public class ProjectileSpell : Spell {
             Debug.Log("Continuously casting projectile.");
             FireProjectiles(projectileSpell);
             AudioSource.PlayClipAtPoint(projectileSpell.castSound, Vector3.zero);
-
+            Instantiate(spellData.castEffect, castPoint.position, Quaternion.identity, castPoint);
         }
     }
 

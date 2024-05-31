@@ -54,5 +54,4 @@ public class ProjectileSpellData : SpellData {
 
 
     public float screenShakeAmount = 0.5f;
-    public AudioClip castSound;
 }
