@@ -14,6 +14,9 @@ public abstract class SpellData : ScriptableObject{
     public bool requiresConcentration = false;
     public bool canAim;
 
+    public float hitStunScale;
+    public float hitStunDuration;
+
     public AudioClip castSound;
     public ParticleSystem castEffect;
 }

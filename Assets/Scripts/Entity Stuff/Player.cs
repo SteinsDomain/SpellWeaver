@@ -54,6 +54,19 @@ public class Player : MonoBehaviour {
         if (gameInput == null) gameInput = FindAnyObjectByType<GameInput>();
     }
     void Update() {
+
+        if (Input.GetKeyDown(KeyCode.T)) {
+            TimeDilationManager.Instance.SetTimeDilation(0.3f, 5f);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Y)) {
+            TimeDilationManager.Instance.StartTimeDilation(0.3f);
+        }
+
+        if (Input.GetKeyUp(KeyCode.Y)) {
+            TimeDilationManager.Instance.StopTimeDilation();
+        }
+
         switch (movementControls) {
             case MovementControls.Platformer:
             HandlePlatformerMovement();

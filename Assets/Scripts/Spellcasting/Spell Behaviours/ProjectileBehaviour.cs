@@ -10,8 +10,8 @@ public class ProjectileBehaviour : MonoBehaviour {
     private Vector3 startPosition;
     private int originLayer;
     private CollisionManager collisionManager;
-    public Transform castPoint;
-    private float travelDistance => Vector3.Distance(startPosition, transform.position);
+   public Transform castPoint;
+    private float TravelDistance => Vector3.Distance(startPosition, transform.position);
 
     private void Start() {
         startPosition = transform.position;
@@ -38,7 +38,7 @@ public class ProjectileBehaviour : MonoBehaviour {
         Vector2 currentPosition = transform.position;
         Vector2 nextPosition = currentPosition + moveDirection;
 
-        RaycastHit2D hit = Physics2D.Raycast(currentPosition, moveDirection, moveDirection.magnitude, LayerMask.GetMask("Ground"));
+        RaycastHit2D hit = Physics2D.Raycast(currentPosition, moveDirection, moveDirection.magnitude, LayerMask.GetMask("Ground", "Enemy", "Player"));
         Debug.DrawRay(currentPosition, moveDirection, Color.red);
 
         if (hit.collider != null)
@@ -61,22 +61,21 @@ public class ProjectileBehaviour : MonoBehaviour {
             return;
         }
 
+        if (spellData.hitEffect != null) {
+            Instantiate(spellData.hitEffect, transform.position, Quaternion.identity);
+            Debug.Log("ProjectileBehaviour: Hit effect instantiated.");
+        }
+
         if (ShouldAffectTarget(collision.gameObject))
         {
             Debug.Log("ProjectileBehaviour: Processing impact with " + collision.gameObject.name);
             HealthManager healthManager = collision.gameObject.GetComponent<HealthManager>();
             if (healthManager != null)
             {
-                healthManager.TakeDamage(spellData.projectileDamage);
+                healthManager.TakeDamage(spellData.projectileDamage, spellData.hitStunScale, spellData.hitStunDuration);
                 Vector2 knockbackDirection = (collision.transform.position - transform.position).normalized;
                 ApplyProjectileKnockback(collision.transform, spellData.projectileKnockback, knockbackDirection);
                 Debug.Log("ProjectileBehaviour: Applied " + spellData.projectileDamage + " damage and knockback to " + collision.gameObject.name);
-            }
-
-            if (spellData.hitEffect != null)
-            {
-                Instantiate(spellData.hitEffect, collision.transform.position, Quaternion.identity);
-                Debug.Log("ProjectileBehaviour: Hit effect instantiated.");
             }
 
             Destroy(gameObject);
@@ -85,7 +84,7 @@ public class ProjectileBehaviour : MonoBehaviour {
     }
 
     private void CheckOutOfRange() {
-        if (travelDistance > spellData.maxProjectileRange) {
+        if (TravelDistance > spellData.maxProjectileRange) {
             Debug.Log("ProjectileBehaviour: Projectile exceeded max range. Destroying.");
             Destroy(gameObject);
         }
@@ -116,42 +115,17 @@ public class ProjectileBehaviour : MonoBehaviour {
                 Debug.Log($"ProjectileBehaviour: Target {hit.gameObject.name} affected by explosion.");
                 HealthManager healthManager = hit.GetComponent<HealthManager>();
                 if (healthManager != null) {
-                    healthManager.TakeDamage(spellData.explosionDamage);
-                    Vector2 knockbackDirection = (hit.transform.position - transform.position).normalized;
+                    healthManager.TakeDamage(spellData.explosionDamage, spellData.hitStunScale, spellData.hitStunDuration); Vector2 knockbackDirection = (hit.transform.position - transform.position).normalized;
                     ApplyExplosionKnockback(hit.transform, spellData.explosionKnockbackForce, knockbackDirection);
                     Debug.Log($"ProjectileBehaviour: Applied {spellData.explosionDamage} damage and knockback to {hit.gameObject.name}.");
                 }
             }
         }
     }
-    void OnCollisionEnter2D(Collision2D collision) { //Change to OnTriggerEnter to get rid of Rigidbodies Completely?
-
-        Debug.Log($"ProjectileBehaviour: Collision detected with {collision.gameObject.name}.");
-
-        if (spellData.isExplosive) {
-            Explode();
-            return;
-        }
-
-        if (ShouldAffectTarget(collision.gameObject)) {
-            Debug.Log($"ProjectileBehaviour: Processing impact with {collision.gameObject.name}.");
-            HealthManager healthManager = collision.gameObject.GetComponent<HealthManager>();
-            if (healthManager != null) {
-                healthManager.TakeDamage(spellData.projectileDamage);
-                Vector2 knockbackDirection = (collision.transform.position - transform.position).normalized;
-                ApplyProjectileKnockback(collision.transform, spellData.projectileKnockback, knockbackDirection);
-                Debug.Log($"ProjectileBehaviour: Applied {spellData.projectileDamage} damage and knockback to {collision.gameObject.name}.");
-            }
-
-            if (spellData.hitEffect != null) {
-                Instantiate(spellData.hitEffect, collision.contacts[0].point, Quaternion.identity);
-                Debug.Log("ProjectileBehaviour: Hit effect instantiated.");
-            }
-
-            Destroy(gameObject);
-            Debug.Log("ProjectileBehaviour: Projectile destroyed after impact.");
-        }
+    private void OnTriggerEnter2D(Collider2D collision) {
+        OnCollision(collision);
     }
+
     public void SetOriginLayer(int layer) {
         originLayer = layer;
     }

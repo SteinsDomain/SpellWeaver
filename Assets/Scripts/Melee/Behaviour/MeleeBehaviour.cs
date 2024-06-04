@@ -26,7 +26,7 @@ public class MeleeBehaviour : MonoBehaviour
             HealthManager healthManager = collision.gameObject.GetComponent<HealthManager>();
             if (healthManager != null)
             {
-                healthManager.TakeDamage(attackData.damage);
+                healthManager.TakeDamage(attackData.damage, 0f, 0f);
                 Debug.Log($"MeleeBehaviour: Applied {attackData.damage} damage to {collision.gameObject.name}.");
                 if (polygonCollider != null) {
                     polygonCollider.enabled = false;

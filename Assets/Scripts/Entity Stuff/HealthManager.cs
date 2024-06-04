@@ -22,9 +22,12 @@ public class HealthManager : MonoBehaviour
             RegenerateHealthOverTime();
         }
     }
-    public void TakeDamage(int damage) {
+    public void TakeDamage(int damage, float hitStunScale, float hitStunDuration) {
         currentHP -= damage;
         currentHP = Mathf.Max(currentHP, 0);
+        if (gameObject.tag == "Player") {
+            TimeDilationManager.Instance.SetTimeDilation(hitStunScale, hitStunDuration);
+        }
 
         if (damageEffect != null) {
             Instantiate(damageEffect, transform.position, Quaternion.identity, transform);

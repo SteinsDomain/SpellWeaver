@@ -19,6 +19,8 @@ MonoBehaviour:
   castsPerSecond: 15
   requiresConcentration: 0
   canAim: 1
+  hitStunScale: 0.3
+  hitStunDuration: 0
   castSound: {fileID: 8300000, guid: 584af4cf30b03034fabca2aacb8db426, type: 3}
   castEffect: {fileID: 7342286864558875182, guid: da015dc90059e144380d699d45810215, type: 3}
   shotType: 0

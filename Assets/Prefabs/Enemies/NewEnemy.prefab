@@ -594,6 +594,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stats: {fileID: 11400000, guid: 045d0f37c9cf56e4b9fc4313b70e07bd, type: 2}
   currentHP: 0
+  damageEffect: {fileID: 0}
 --- !u!114 &7733713398510890583
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -610,8 +611,8 @@ MonoBehaviour:
   isFacingRight: 1
   isGrounded: 0
   shouldMove: 1
-  attackRange: 3
-  chaseRange: 6
+  attackRange: 10
+  chaseRange: 20
   attackCooldown: 0.5
   idlePauseDuration: 2
   wanderRange: 4
@@ -629,7 +630,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   castPoint: {fileID: 2612679237092701663}
-  manaManager: {fileID: 9169413528601025964}
   standardSpellCombinations: {fileID: 11400000, guid: 67b61c9f77eca8049849a0cf6455270a, type: 2}
   customSpellCombinations: []
   elementEffects: []
@@ -675,6 +675,8 @@ MonoBehaviour:
   horizontalCastBuffer: 0.01
   collisionAdjustmentBuffer: 0.01
   wallCheckDistance: 0.1
+  slopeCheckDistance: 0.1
+  maxSlopeAngle: 45
 --- !u!61 &1507489699536811239
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -736,7 +738,7 @@ MonoBehaviour:
   proximityDialogue: {fileID: 11400000, guid: e188c9a2794af664a8827ff141074b64, type: 2}
   randomizeProximityDialogue: 0
   clickDialogue: {fileID: 0}
-  detectionRadius: 5.95
+  detectionRadius: 20
   playerLayer:
     serializedVersion: 2
     m_Bits: 64
