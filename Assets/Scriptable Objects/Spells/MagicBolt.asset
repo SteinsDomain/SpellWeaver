@@ -20,7 +20,7 @@ MonoBehaviour:
   requiresConcentration: 0
   canAim: 1
   hitStunScale: 0.3
-  hitStunDuration: 0
+  hitStunDuration: 0.1
   castSound: {fileID: 8300000, guid: 584af4cf30b03034fabca2aacb8db426, type: 3}
   castEffect: {fileID: 7342286864558875182, guid: da015dc90059e144380d699d45810215, type: 3}
   shotType: 0
@@ -28,6 +28,7 @@ MonoBehaviour:
   projectilePrefab: {fileID: 3082819435468633395, guid: 372d7af6c1323c74d8992d47e1eabd3f, type: 3}
   explosionPrefab: {fileID: 0}
   hitEffect: {fileID: 7342286864558875182, guid: bfaf5e99cf87671448fbd08c4de83b45, type: 3}
+  projectileSizeMod: 1
   projectileSpeed: 50
   projectileKnockback: 0
   projectileRecoil: 0

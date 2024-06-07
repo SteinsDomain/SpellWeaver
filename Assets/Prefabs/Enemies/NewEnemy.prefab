@@ -611,8 +611,8 @@ MonoBehaviour:
   isFacingRight: 1
   isGrounded: 0
   shouldMove: 1
-  attackRange: 10
-  chaseRange: 20
+  attackRange: 7
+  chaseRange: 10
   attackCooldown: 0.5
   idlePauseDuration: 2
   wanderRange: 4
@@ -738,7 +738,7 @@ MonoBehaviour:
   proximityDialogue: {fileID: 11400000, guid: e188c9a2794af664a8827ff141074b64, type: 2}
   randomizeProximityDialogue: 0
   clickDialogue: {fileID: 0}
-  detectionRadius: 20
+  detectionRadius: 10
   playerLayer:
     serializedVersion: 2
     m_Bits: 64

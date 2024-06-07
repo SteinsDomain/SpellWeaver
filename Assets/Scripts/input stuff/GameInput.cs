@@ -14,7 +14,7 @@ public class GameInput : MonoBehaviour {
     public Vector2 GetMovementDirection() {
          return playerInputActions.Player.Move.ReadValue<Vector2>();
     }
-    public float GetAimDirection(){
+    public float GetAimDirectionPlatformer(){
         Vector2 aimDirection = playerInputActions.Player.Move.ReadValue<Vector2>();
         if(aimDirection.y > 0) {
             return 1;

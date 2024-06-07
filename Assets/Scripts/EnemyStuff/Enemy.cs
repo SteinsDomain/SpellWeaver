@@ -6,6 +6,8 @@ using UnityEngine.EventSystems;
 
 public class Enemy : MonoBehaviour
 {
+
+
     private enum State { Idle, Wander, Chase, Attack}
     private State currentState = State.Idle;
 

@@ -88,7 +88,7 @@ public class ProjectileSpell : Spell {
         GameObject projectile = Instantiate(projectileSpell.projectilePrefab, startPosition, Quaternion.identity);
         projectile.transform.rotation = Quaternion.FromToRotation(Vector3.up, direction);
         float scale = castPoint.parent.localScale.x > 0 ? 1 : -1;
-        projectile.transform.localScale = new Vector3(scale, 1, 1);
+        projectile.transform.localScale = new Vector3(scale * projectileSpell.projectileSizeMod, projectileSpell.projectileSizeMod, 1);
 
         if (castPoint.parent != null) {
             if (castPoint.parent.CompareTag("Player")) {

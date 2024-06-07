@@ -31,6 +31,7 @@ public class Player : MonoBehaviour {
     private Vector2 moveDirection;
     private float horizontalSpeed = 0f;
     private float verticalSpeed = 0f;
+    private Vector2 lastAimDirection;
     private float smoothTime;
     private int airJumpsLeft;
     private bool isWallJumping;
@@ -75,7 +76,7 @@ public class Player : MonoBehaviour {
 
             case MovementControls.TopDown:
             HandleTopDownMovement();
-            HandleAiming360();
+            //HandleAiming360();
             break;
 
             case MovementControls.Runner:
@@ -166,6 +167,7 @@ public class Player : MonoBehaviour {
         UpdateHorizontalMovement();
         UpdateVerticalMovement();
         FlipPlayerSprite();
+
     }
     private void HandleRunnerMovement() {
         CheckGrounded();
@@ -329,18 +331,21 @@ public class Player : MonoBehaviour {
 
     #region SpellCasting Section
     private void HandleAiming360() {
-        /* Not Working As Intended 
-        Vector2 aimDirection = gameInput.GetSchoolMenuDirection();
-        if (aimDirection.sqrMagnitude > 0.01f) {  // Ensure the direction is significant to avoid jittering
+        Vector2 aimDirection = gameInput.GetSchoolMenuDirection();  // Gets the direction vector from the stick input
 
-            // Rotate the cast point to face the direction
-            transform.rotation = Quaternion.LookRotation(Vector3.forward, aimDirection);
+        if (aimDirection != Vector2.zero)
+        {
+            lastAimDirection = aimDirection;
         }
-        */
+
+        float angle = Mathf.Atan2(lastAimDirection.y, lastAimDirection.x) * Mathf.Rad2Deg;
+
+        // Rotate the caster to face the direction of the stick input
+        transform.rotation = Quaternion.Euler(0, 0, angle);
     }
     private void HandleAimingUp() {
         if (spellManager.currentSpellInstance?.CanAim == true) {
-            float aimDirection = gameInput.GetAimDirection();  // Gets -1, 0, 1
+            float aimDirection = gameInput.GetAimDirectionPlatformer();  // Gets -1, 0, 1
             int rotationDirection = isFacingRight ? 1 : -1;
 
             if (aimDirection == 1 && !isAimingUp) {

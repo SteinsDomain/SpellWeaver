@@ -27,6 +27,8 @@ public class ProjectileSpellData : SpellData {
     public GameObject explosionPrefab;
     public ParticleSystem hitEffect;
 
+    public float projectileSizeMod;
+
     //possible uses for all shot types I think
     public float projectileSpeed;
     public float projectileKnockback;
