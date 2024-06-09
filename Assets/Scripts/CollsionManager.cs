@@ -56,8 +56,7 @@ public class CollisionManager : MonoBehaviour
                 slopeDirection *= direction;
 
                 float adjustedSpeed = horizontalSpeed / Mathf.Cos(slopeAngle * Mathf.Deg2Rad);
-                transform.Translate(slopeDirection.normalized * adjustedSpeed * Time.deltaTime);
-                horizontalSpeed = 0; // Stop horizontal movement as it's handled by the slope adjustment
+                horizontalSpeed = adjustedSpeed;
             }
             else {
                 horizontalSpeed = (hit.distance - collisionAdjustmentBuffer) * direction / Time.deltaTime;

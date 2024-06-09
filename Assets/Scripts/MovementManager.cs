@@ -28,11 +28,18 @@ public class MovementManager : MonoBehaviour
     private bool ignoreInput = false;
     private bool CanWallJump => CheckForWall() != 0; // If CheckForWall returns anything but 0, a wall jump is possible 
 
+
+    private Rigidbody2D rb;
+
+
+
     private void Awake() {
         TryGetComponent<SpellManager>(out spellManager);
         TryGetComponent<CollisionManager>(out collisionManager);
 
         if (gameInput == null) gameInput = FindAnyObjectByType<GameInput>();
+
+        rb = GetComponent<Rigidbody2D>();
 
     }
 
@@ -51,6 +58,10 @@ public class MovementManager : MonoBehaviour
             RunnerMovement();
             break;
         }
+        
+    }
+
+    private void FixedUpdate() {
         UpdatePosition();
     }
 
@@ -80,7 +91,7 @@ public class MovementManager : MonoBehaviour
             }
         }
         else {
-            //verticalSpeed = Mathf.Max(0, verticalSpeed); // Prevents verticalSpeed from going negative while grounded, wasnt working properly?
+            verticalSpeed = Mathf.Max(0, verticalSpeed); // Prevents verticalSpeed from going negative while grounded, wasnt working properly?
         }
         if (!isWallSliding) {
             if (verticalSpeed < 0 || (!gameInput.JumpHeld() && verticalSpeed > 0)) {
@@ -185,16 +196,20 @@ public class MovementManager : MonoBehaviour
 
         if (isGrounded && moveDirection.x == 0) {
             verticalSpeed = Mathf.MoveTowards(verticalSpeed, 0f, stats.groundSpeed * Time.deltaTime / stats.groundDecelerationTime);
-        }
-
-
+        } 
     }
 
     private void UpdatePosition()
     {
-        horizontalSpeed = collisionManager.CheckForHorizontalCollision(horizontalSpeed, transform);
-        verticalSpeed = collisionManager.CheckForVerticalCollision(verticalSpeed, transform);
-        transform.position += new Vector3(horizontalSpeed * Time.deltaTime, verticalSpeed * Time.deltaTime, 0);
+        //horizontalSpeed = collisionManager.CheckForHorizontalCollision(horizontalSpeed, transform);
+        //verticalSpeed = collisionManager.CheckForVerticalCollision(verticalSpeed, transform);
+
+        //transform.position += new Vector3(horizontalSpeed * Time.deltaTime, verticalSpeed * Time.deltaTime, 0);
+        // Apply the calculated speeds to the Rigidbody2D
+        Vector2 velocity = rb.velocity;
+        velocity.x = horizontalSpeed;
+        velocity.y = verticalSpeed;
+        rb.velocity = velocity;
     }
     #endregion
     #region Jump Section

@@ -23,7 +23,7 @@ MonoBehaviour:
   airSpeed: 20
   airAccelerationTime: 0.25
   airDecelerationTime: 1
-  groundJumpHeight: 3
+  groundJumpHeight: 5
   jumpDecay: 100
   gravity: 50
   airJumpHeight: 2
