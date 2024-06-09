@@ -117,7 +117,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ee8ec8114074894c8ea2a0a7df4676a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stats: {fileID: 11400000, guid: 71276be25fb69b7449e71c96033ee24c, type: 2}
+  stats: {fileID: 11400000, guid: f229a00c201c6f746b1a4db9038516c7, type: 2}
   mySpellList: {fileID: 0}
   movementControls: 1
   isGrounded: 0

@@ -10,6 +10,10 @@ public class DialogueManager : MonoBehaviour {
     public GameObject choiceButtonPrefab; // Assign a prefab for choice buttons
     private List<GameObject> activeDialogueBoxes = new List<GameObject>();
 
+    private void Awake() {
+        DontDestroyOnLoad(gameObject);
+    }
+
     public GameObject CreateDialogueBox() {
         GameObject newDialogueBox = Instantiate(dialogueBoxPrefab, transform);
         activeDialogueBoxes.Add(newDialogueBox);

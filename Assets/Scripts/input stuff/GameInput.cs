@@ -9,6 +9,9 @@ public class GameInput : MonoBehaviour {
     private void Awake() {
         playerInputActions = new PlayerInputActions(); // Instantiates the player input actions.
         playerInputActions.Player.Enable(); // Enables the Player action map, allowing it to start receiving input.
+
+        DontDestroyOnLoad(gameObject);
+
     }
 
     public Vector2 GetMovementDirection() {
