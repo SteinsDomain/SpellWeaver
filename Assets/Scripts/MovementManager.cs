@@ -8,78 +8,47 @@ using UnityEngine.EventSystems;
 
 public class MovementManager : MonoBehaviour
 {
-    private GameInput gameInput;
     public StatsSO stats;
     private CollisionManager collisionManager;
-    private SpellManager spellManager;
-
-    public enum MovementControls { Platformer, TopDown, Runner }
-    public MovementControls movementControls;
-
     public bool isGrounded;
     public bool isFacingRight = true;
-
-    private Vector2 moveDirection;
     private float horizontalSpeed = 0f;
     private float verticalSpeed = 0f;
     private float smoothTime;
     private int airJumpsLeft;
     private bool isWallJumping;
     private bool ignoreInput = false;
-    private bool CanWallJump => CheckForWall() != 0; // If CheckForWall returns anything but 0, a wall jump is possible 
-
+    private bool CanWallJump => CheckForWall() != 0; // If CheckFo/rWall returns anything but 0, a wall jump is possible 
 
     private Rigidbody2D rb;
 
-
-
     private void Awake() {
-        TryGetComponent<SpellManager>(out spellManager);
         TryGetComponent<CollisionManager>(out collisionManager);
-
-        if (gameInput == null) gameInput = FindAnyObjectByType<GameInput>();
-
         rb = GetComponent<Rigidbody2D>();
-
     }
 
     private void Update() {
+        if (Input.GetKey(KeyCode.R)) {
 
-        switch (movementControls) {
-            case MovementControls.Platformer:
-            PlatformerMovement();
-            break;
-
-            case MovementControls.TopDown:
-            TopDownMovement();
-            break;
-
-            case MovementControls.Runner:
-            RunnerMovement();
-            break;
+            ApplyRecoil(1f);
         }
-        
-    }
-
-    private void FixedUpdate() {
-        UpdatePosition();
     }
 
     #region Collision and Gravity
-    private void CheckGrounded() {
+    public void CheckGrounded(MovementControls controlType) {
         bool wasGrounded = isGrounded;
         isGrounded = collisionManager.CheckIfGrounded(transform);
         if (isGrounded && !wasGrounded) {
             OnLanding();
         }
-        if (movementControls == MovementControls.TopDown) {
+        if (controlType == MovementControls.TopDown) {
             isGrounded = false;
         }
     }
     private void OnLanding() {
         ResetJump();
     }
-    private void HandleFalling() {
+    public void HandleFalling(bool jumpHeld) {
         bool isWallSliding = CheckForWall() != 0 && !isGrounded && verticalSpeed < 0;
         if (!isGrounded) {
             if (isWallSliding) {
@@ -94,7 +63,7 @@ public class MovementManager : MonoBehaviour
             verticalSpeed = Mathf.Max(0, verticalSpeed); // Prevents verticalSpeed from going negative while grounded, wasnt working properly?
         }
         if (!isWallSliding) {
-            if (verticalSpeed < 0 || (!gameInput.JumpHeld() && verticalSpeed > 0)) {
+            if (verticalSpeed < 0 || (!jumpHeld && verticalSpeed > 0)) {
                 verticalSpeed -= stats.jumpDecay * Time.deltaTime; // Apply decay when falling or jump is not held
             }
         }
@@ -106,43 +75,10 @@ public class MovementManager : MonoBehaviour
         return collisionManager.CheckForWall();
     }
     #endregion
+
     #region Movement
-    private void PlatformerMovement() {
-        CheckGrounded();
-        HandleFalling();
-        Jump();
-        GetMovementInput();
-        UpdateHorizontalMovement();
-        FlipPlayerSprite();
-    }
-    private void TopDownMovement() {
-        CheckGrounded();
-        GetMovementInput();
-        UpdateHorizontalMovement();
-        UpdateVerticalMovement();
-        FlipPlayerSprite();
-    }
-    private void RunnerMovement() {
-        CheckGrounded();
-        HandleFalling();
-        Jump();
-        moveDirection = Vector2.right;
-        UpdateHorizontalMovement();
-    }
-
-    private void GetMovementInput() {
-        switch (movementControls) {
-            case MovementControls.Platformer:
-            moveDirection = gameInput.GetMovementDirection();
-            break;
-
-            case MovementControls.TopDown:
-            moveDirection = gameInput.GetElementMenuDirection();
-            break;
-        }
-    }
-    private void UpdateHorizontalMovement() {
-        if (!spellManager.IsConcentrating && !ignoreInput) {
+    public void UpdateHorizontalMovement(Vector2 moveDirection, bool isConcentrating = false) {
+        if (!isConcentrating && !ignoreInput) {
             float targetSpeed = moveDirection.x * (isGrounded ? stats.groundSpeed : stats.airSpeed);
             float currentSpeed = horizontalSpeed;
             // Determine the appropriate time factor based on whether the player is accelerating or decelerating
@@ -156,7 +92,7 @@ public class MovementManager : MonoBehaviour
             horizontalSpeed = Mathf.Clamp(horizontalSpeed, -maxSpeed, maxSpeed);
         }
 
-        if (spellManager.IsConcentrating) {
+        if (isConcentrating) {
             //maintain current momentum and direction, ignoring new input.
             moveDirection.x = Mathf.Sign(horizontalSpeed);
             if (isGrounded) {
@@ -170,8 +106,8 @@ public class MovementManager : MonoBehaviour
         }
 
     }
-    private void UpdateVerticalMovement() {
-        if (!spellManager.IsConcentrating && !ignoreInput) {
+    public void UpdateVerticalMovement(Vector2 moveDirection, bool isConcentrating = false) {
+        if (!isConcentrating && !ignoreInput) {
             float targetSpeed = moveDirection.y * (isGrounded ? stats.groundSpeed : stats.airSpeed);
             float currentSpeed = verticalSpeed;
             // Determine the appropriate time factor based on whether the player is accelerating or decelerating
@@ -185,7 +121,7 @@ public class MovementManager : MonoBehaviour
             verticalSpeed = Mathf.Clamp(verticalSpeed, -maxSpeed, maxSpeed);
         }
 
-        if (spellManager.IsConcentrating) {
+        if (isConcentrating) {
             //maintain current momentum and direction, ignoring new input.
             moveDirection.y = Mathf.Sign(verticalSpeed);
             if (isGrounded) {
@@ -199,7 +135,7 @@ public class MovementManager : MonoBehaviour
         } 
     }
 
-    private void UpdatePosition()
+    public void UpdatePosition()
     {
         //horizontalSpeed = collisionManager.CheckForHorizontalCollision(horizontalSpeed, transform);
         //verticalSpeed = collisionManager.CheckForVerticalCollision(verticalSpeed, transform);
@@ -212,15 +148,9 @@ public class MovementManager : MonoBehaviour
         rb.velocity = velocity;
     }
     #endregion
-    #region Jump Section
-    private void Jump() {
-        if (spellManager.IsConcentrating) return;
 
-        if (gameInput.JumpPressed()) {
-            TryJump();
-        }
-    }
-    private void TryJump() {
+    #region Jump Section
+    public void TryJump() {
         if (CanWallJump && !isGrounded) {
             WallJump();
         }
@@ -260,35 +190,53 @@ public class MovementManager : MonoBehaviour
         airJumpsLeft = stats.maxAirJumps;
     }
     #endregion
-    private void FlipPlayerSprite() {
+
+    public void FlipPlayerSprite(Vector2 moveDirection, bool isConcentrating = false) {
         if (!isGrounded) {
             int wallDirection = CheckForWall();
             if (wallDirection != 0) { //if we're touching a wall on either side while airborne
                 isFacingRight = wallDirection == -1; //Face away from the wall
             }
             else { //Otherwise turn freely in the air
-                FlipBasedOnMovement();
+                FlipBasedOnMovement(moveDirection, isConcentrating);
             }
         }
         else {//and while we're on the ground
-            FlipBasedOnMovement();
+            FlipBasedOnMovement(moveDirection, isConcentrating);
         }
-        transform.localScale = new Vector3(isFacingRight ? 1 : -1, 1, 1);
+        SetRotation(isFacingRight);
     }
-    private void FlipBasedOnMovement() {
-        if (spellManager.IsConcentrating) {
-            transform.localScale = new Vector3(isFacingRight ? 1 : -1, 1, 1);
+    private void FlipBasedOnMovement(Vector2 moveDirection, bool isConcentrating) {
+        if (isConcentrating) {
+            SetRotationBasedOnCastPoint();
         }
         else {
-            if (moveDirection.x > 0) {
-                isFacingRight = true;
-                //castPoint.localScale = new Vector3(1, 1, 1);  // Face right
+            if (moveDirection.x != 0) { // Check if there is horizontal movement
+        
+                isFacingRight = moveDirection.x > 0;
             }
-            else if (moveDirection.x < 0) {
-                isFacingRight = false;
-                //castPoint.localScale = new Vector3(-1, 1, 1);  // Face left
-            }
-            transform.localScale = new Vector3(isFacingRight ? 1 : -1, 1, 1);
+            SetRotation(isFacingRight);
         }
-    } 
+    }
+
+    private void SetRotationBasedOnCastPoint() {
+        // Check the direction the castPoint is facing
+        isFacingRight = GetComponent<SpellManager>().castPoint.right.x > 0;
+
+        // Set the rotation based on the castPoint's direction
+        SetRotation(isFacingRight);
+    }
+
+    private void SetRotation(bool faceRight) {
+        float yRotation = faceRight ? 0 : 180;
+        transform.rotation = Quaternion.Euler(0, yRotation, 0);
+        // If you need to adjust castPoint as well
+        // castPoint.localRotation = Quaternion.Euler(0, yRotation, 0);
+    }
+
+    public void ApplyRecoil(float recoilAmount) {
+        // Apply recoil force to the rigidbody
+        Vector2 recoilDirection = -GetComponent<SpellManager>().castPoint.right;
+        rb.AddForce(recoilDirection * recoilAmount);
+    }
 }

@@ -87,8 +87,10 @@ public class ProjectileSpell : Spell {
     private void FireProjectile(ProjectileSpellData projectileSpell, Vector3 startPosition, Vector3 direction) {
         GameObject projectile = Instantiate(projectileSpell.projectilePrefab, startPosition, Quaternion.identity);
         projectile.transform.rotation = Quaternion.FromToRotation(Vector3.up, direction);
-        float scale = castPoint.parent.localScale.x > 0 ? 1 : -1;
+        float scale = castPoint.parent.transform.localRotation.eulerAngles.y == 180 ? -1 : 1;
         projectile.transform.localScale = new Vector3(scale * projectileSpell.projectileSizeMod, projectileSpell.projectileSizeMod, 1);
+
+        //var caster = castPoint.parent;
 
         if (castPoint.parent != null) {
             if (castPoint.parent.CompareTag("Player")) {
@@ -107,6 +109,13 @@ public class ProjectileSpell : Spell {
                 Debug.LogError("Origin parent is neither Player nor Enemy. Using default layer.");
                 projectile.layer = LayerMask.NameToLayer("Default");
             }
+        }
+
+        var movementManager = castPoint.GetComponentInParent<MovementManager>();
+        if (movementManager != null) {
+            Debug.Log("Applying recoil to " + movementManager.name);
+
+            movementManager.ApplyRecoil(projectileSpell.projectileRecoil);
         }
 
         var behaviour = projectile.AddComponent<ProjectileBehaviour>();

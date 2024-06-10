@@ -46,8 +46,10 @@ GameObject:
   - component: {fileID: 2004417269499673719}
   - component: {fileID: 8171840491350493379}
   - component: {fileID: 7146269387054342707}
+  - component: {fileID: -5575313498693597735}
   - component: {fileID: 3236567765465252850}
   - component: {fileID: 1590564897865573459}
+  - component: {fileID: 9034570447207820263}
   m_Layer: 6
   m_Name: MrSpaceMan
   m_TagString: Player
@@ -118,10 +120,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stats: {fileID: 11400000, guid: f229a00c201c6f746b1a4db9038516c7, type: 2}
-  mySpellList: {fileID: 0}
   movementControls: 1
-  isGrounded: 0
-  isFacingRight: 1
   interactableLayer:
     serializedVersion: 2
     m_Bits: 4096
@@ -177,6 +176,21 @@ MonoBehaviour:
   availableSchools: 00000000
   currentElement: 0
   currentSchool: 0
+--- !u!114 &-5575313498693597735
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2308750519620938882}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c965c147a7a8654d960558425236acb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stats: {fileID: 0}
+  isGrounded: 0
+  isFacingRight: 1
 --- !u!114 &3236567765465252850
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -243,6 +257,33 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.5, y: 1.5}
   m_EdgeRadius: 0
+--- !u!50 &9034570447207820263
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2308750519620938882}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 0.0001
+  m_LinearDrag: 0
+  m_AngularDrag: 0
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 1
+  m_Constraints: 4
 --- !u!1 &2776032427322816649
 GameObject:
   m_ObjectHideFlags: 0

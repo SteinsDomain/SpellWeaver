@@ -31,7 +31,7 @@ MonoBehaviour:
   projectileSizeMod: 1
   projectileSpeed: 50
   projectileKnockback: 0
-  projectileRecoil: 0
+  projectileRecoil: 0.05
   projectileDamage: 10
   maxProjectileRange: 10
   isExplosive: 0
