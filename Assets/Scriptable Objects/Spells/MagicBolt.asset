@@ -30,8 +30,8 @@ MonoBehaviour:
   hitEffect: {fileID: 7342286864558875182, guid: bfaf5e99cf87671448fbd08c4de83b45, type: 3}
   projectileSizeMod: 1
   projectileSpeed: 50
-  projectileKnockback: 0
-  projectileRecoil: 0.05
+  projectileKnockback: 100
+  projectileRecoil: 0
   projectileDamage: 10
   maxProjectileRange: 10
   isExplosive: 0
@@ -46,4 +46,4 @@ MonoBehaviour:
   shotsPerCast: 1
   projectileAccuracy: 0
   maxSpread: 0
-  screenShakeAmount: 0.5
+  screenShakeAmount: 0

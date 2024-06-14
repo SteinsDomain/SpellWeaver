@@ -14,6 +14,7 @@ public class Enemy : MonoBehaviour
     public StatsSO stats;
     private HealthManager healthManager;
     private SpellManager spellManager;
+    private MovementManager movementManager;
     private CollisionManager collisionManager;
 
     public bool isFacingRight = true;
@@ -39,6 +40,7 @@ public class Enemy : MonoBehaviour
     private Vector3 initialPosition;
     private Transform player;
 
+
     void Awake() {
         healthManager = GetComponent<HealthManager>();
         if (healthManager != null ) {
@@ -48,14 +50,15 @@ public class Enemy : MonoBehaviour
         spellManager = GetComponent<SpellManager>();
         initialPosition = transform.position;
         player = GameObject.FindWithTag("Player")?.transform;
+        TryGetComponent<MovementManager>(out movementManager);
     }
 
     void Update() {
-        CheckGrounded();
-        HandleFalling();
+        movementManager.CheckGrounded(Player.MovementControls.Enemy);
+        movementManager.HandleFalling(false);
         UpdateStateMachine();
         Move();
-        UpdatePosition();
+        movementManager.UpdatePosition();
     }
 
     private void UpdateStateMachine() {
@@ -198,60 +201,24 @@ public class Enemy : MonoBehaviour
     private void Move() {
         if (shouldMove && moveDirection != Vector2.zero) {
             
-            UpdateHorizontalMovement();
+            movementManager.UpdateHorizontalMovement(moveDirection);
             
 
             // Optionally handle flipping the enemy sprite based on the direction
-            if (moveDirection.x > 0 && !isFacingRight || moveDirection.x < 0 && isFacingRight) {
-                Flip();
+            if (moveDirection.x > 0 && !movementManager.isFacingRight || moveDirection.x < 0 && movementManager.isFacingRight) {
+                movementManager.FlipPlayerSprite(moveDirection);
             }
         } 
         else {
             horizontalSpeed = 0f;
         }
     }
-    private void Flip() {
-        isFacingRight = !isFacingRight;
-        Vector3 theScale = transform.localScale;
-        theScale.x *= -1;
-        transform.localScale = theScale;
-    }
-    private void CheckGrounded() {
-        isGrounded = collisionManager.CheckIfGrounded(transform);
-    }
-    private void HandleFalling() {
-        if (!isGrounded) {
-            ApplyGravity();
-        }
-        else {
-            //verticalSpeed = Mathf.Max(0, verticalSpeed); // Prevents verticalSpeed from going negative while grounded
-        }
-    }
-    private void ApplyGravity(float modifier = 1f) {
-        verticalSpeed -= (stats.gravity * modifier) * Time.deltaTime;
-    }
-    private void UpdateHorizontalMovement() {
-            float targetspeed = moveDirection.x * stats.groundSpeed;
-            float speedDiff = targetspeed - horizontalSpeed;
-            // Accelerate or decelerate towards the target speed.
-            smoothTime = (moveDirection.x == 0 && isGrounded) ? stats.groundDecelerationTime : stats.groundAccelerationTime;
-            float movementAdjustment = Mathf.Pow(Mathf.Abs(speedDiff) * smoothTime, 2) * Mathf.Sign(speedDiff);
-            horizontalSpeed += movementAdjustment * Time.deltaTime;
-            // Clamp the horizontal speed to prevent it from exceeding the target speed.
-            horizontalSpeed = Mathf.Clamp(horizontalSpeed, -stats.groundSpeed, stats.groundSpeed);
-    }
-    private void UpdatePosition()
-    {
-        horizontalSpeed = collisionManager.CheckForHorizontalCollision(horizontalSpeed, transform);
-        verticalSpeed = collisionManager.CheckForVerticalCollision(verticalSpeed, transform);
-        transform.position += new Vector3(horizontalSpeed * Time.deltaTime, verticalSpeed * Time.deltaTime, 0);
-    }
     public void TakeKnockback(float knockbackForce, Vector2 knockbackDirection) {
         // Normalize the knockback direction and multiply by the knockback force
         Vector2 knockback = knockbackDirection.normalized * knockbackForce;
         horizontalSpeed += knockback.x;
         verticalSpeed += knockback.y;
-        UpdateHorizontalMovement();
+        movementManager.UpdateHorizontalMovement(new Vector2(horizontalSpeed, verticalSpeed));
         Debug.Log($"Enemy: Taking knockback with force {knockbackForce} in direction {knockbackDirection}.");
     }
     void HandleDeath() {

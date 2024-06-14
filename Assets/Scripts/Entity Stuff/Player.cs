@@ -21,7 +21,7 @@ public class Player : MonoBehaviour {
     private MovementManager movementManager; 
     #endregion
 
-    public enum MovementControls {Platformer, TopDown, Runner}
+    public enum MovementControls {Platformer, TopDown, Runner, Enemy}
     public MovementControls movementControls;
 
     #region Interaction Variables

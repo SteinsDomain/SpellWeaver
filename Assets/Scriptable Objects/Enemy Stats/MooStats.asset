@@ -17,9 +17,9 @@ MonoBehaviour:
   maxMP: 0
   mpRegenAmount: 0
   mpRegenRate: 0
-  groundSpeed: 15
-  groundAccelerationTime: 0.2
-  groundDecelerationTime: 0.1
+  groundSpeed: 0.5
+  groundAccelerationTime: 0
+  groundDecelerationTime: 0
   airSpeed: 0
   airAccelerationTime: 0
   airDecelerationTime: 0
