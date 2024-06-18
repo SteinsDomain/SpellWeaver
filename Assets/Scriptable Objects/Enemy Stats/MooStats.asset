@@ -20,7 +20,7 @@ MonoBehaviour:
   groundSpeed: 0.5
   groundAccelerationTime: 0
   groundDecelerationTime: 0
-  airSpeed: 0
+  airSpeed: 0.53
   airAccelerationTime: 0
   airDecelerationTime: 0
   groundJumpHeight: 0

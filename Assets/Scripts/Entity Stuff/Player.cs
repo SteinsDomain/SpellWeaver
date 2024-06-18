@@ -18,11 +18,9 @@ public class Player : MonoBehaviour {
     private ManaManager manaManager;
     private MeleeManager meleeManager;
     private SpellManager spellManager;
-    private MovementManager movementManager; 
+    private MovementManager movementManager;
     #endregion
 
-    public enum MovementControls {Platformer, TopDown, Runner, Enemy}
-    public MovementControls movementControls;
 
     #region Interaction Variables
     public LayerMask interactableLayer;
@@ -58,18 +56,18 @@ public class Player : MonoBehaviour {
             TimeDilationManager.Instance.StopTimeDilation();
         }
 
-        switch (movementControls) {
-            case MovementControls.Platformer:
+        switch (GameManager.Instance.movementControls) {
+            case GameManager.MovementControls.Platformer:
             HandlePlatformerMovement();
             HandleAimingUp();
             break;
 
-            case MovementControls.TopDown:
+            case GameManager.MovementControls.TopDown:
             HandleTopDownMovement();
             HandleAiming360();
             break;
 
-            case MovementControls.Runner:
+            case GameManager.MovementControls.Runner:
             HandleRunnerMovement();
             HandleAimingUp();
             break;
@@ -104,16 +102,17 @@ public class Player : MonoBehaviour {
         }
         TryGetComponent<MeleeManager>(out meleeManager);
         TryGetComponent<SpellManager>(out spellManager);
+
     }
 
     #region Movement
     private void GetMovementInput() {
-        switch (movementControls) {
-            case MovementControls.Platformer:
+        switch (GameManager.Instance.movementControls) {
+            case GameManager.MovementControls.Platformer:
                 moveDirection = gameInput.GetMovementDirection();
             break;
 
-            case MovementControls.TopDown:
+            case GameManager.MovementControls.TopDown:
                 moveDirection = gameInput.GetElementMenuDirection();
             break;
         }
@@ -127,26 +126,24 @@ public class Player : MonoBehaviour {
     }
 
     private void HandlePlatformerMovement() {
-        movementManager.CheckGrounded(movementControls);
+        movementManager.CheckGrounded();
         movementManager.HandleFalling(gameInput.JumpHeld());
         GetJumpInput();
         GetMovementInput();
 
         movementManager.UpdateHorizontalMovement(moveDirection, spellManager.IsConcentrating);
-
         movementManager.FlipPlayerSprite(moveDirection, spellManager.IsConcentrating);
     }
     private void HandleTopDownMovement() {
-        movementManager.CheckGrounded(movementControls);
+        movementManager.CheckGrounded();
         GetMovementInput();
+
         movementManager.UpdateHorizontalMovement(moveDirection, spellManager.IsConcentrating);
         movementManager.UpdateVerticalMovement(moveDirection, spellManager.IsConcentrating);
-
         movementManager.FlipPlayerSprite(lastAimDirection, spellManager.IsConcentrating);
-
     }
     private void HandleRunnerMovement() {
-        movementManager.CheckGrounded(movementControls);
+        movementManager.CheckGrounded();
         movementManager.HandleFalling(gameInput.JumpHeld());
         GetJumpInput();
         moveDirection = Vector2.right;

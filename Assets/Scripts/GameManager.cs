@@ -4,6 +4,10 @@ public class GameManager : MonoBehaviour {
 
     public static GameManager Instance;
 
+    public enum MovementControls { Platformer, TopDown, Runner, Enemy }
+    public MovementControls movementControls;
+
+
     public RoomGenerator roomGenerator;
     public int minWidth = 5;
     public int maxWidth = 15;

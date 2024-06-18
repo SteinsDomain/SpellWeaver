@@ -35,13 +35,13 @@ public class MovementManager : MonoBehaviour
     }
 
     #region Collision and Gravity
-    public void CheckGrounded(MovementControls controlType) {
+    public void CheckGrounded() {
         bool wasGrounded = isGrounded;
         isGrounded = collisionManager.CheckIfGrounded(transform);
         if (isGrounded && !wasGrounded) {
             OnLanding();
         }
-        if (controlType == MovementControls.TopDown) {
+        if (GameManager.Instance.movementControls == GameManager.MovementControls.TopDown){
             isGrounded = false;
         }
     }
