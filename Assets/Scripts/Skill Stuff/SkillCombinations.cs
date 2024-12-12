@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class SpellCombinations {
-    public SpellManager.Element element;
-    public SpellManager.School school;
-    public SpellData spell;
+public class SkillCombinations {
+    public SkillManager.Element element;
+    public SkillManager.School school;
+    public SkillData skill;
 
-    public SpellCombinations(SpellManager.Element element, SpellManager.School school, SpellData spell) {
+    public SkillCombinations(SkillManager.Element element, SkillManager.School school, SkillData spell) {
         this.element = element;
         this.school = school;
-        this.spell = spell;
+        this.skill = spell;
     }
 }
 
@@ -19,7 +19,7 @@ public class SpellCombinations {
 
 [System.Serializable]
 public class ElementEffectMapping {
-    public SpellManager.Element element;
+    public SkillManager.Element element;
     public GameObject effectPrefab;
 }
 
@@ -27,6 +27,6 @@ public class ElementEffectMapping {
 
 [System.Serializable]
 public class SchoolEffectMapping {
-    public SpellManager.School school;
+    public SkillManager.School school;
     public GameObject effectPrefab;
 }

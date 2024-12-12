@@ -221,7 +221,7 @@ public class MovementManager : MonoBehaviour
 
     private void SetRotationBasedOnCastPoint() {
         // Check the direction the castPoint is facing
-        isFacingRight = GetComponent<SpellManager>().castPoint.right.x > 0;
+        isFacingRight = GetComponent<SkillManager>().castPoint.right.x > 0;
 
         // Set the rotation based on the castPoint's direction
         SetRotation(isFacingRight);
@@ -236,7 +236,7 @@ public class MovementManager : MonoBehaviour
 
     public void ApplyRecoil(float recoilAmount) {
         // Apply recoil force to the rigidbody
-        Vector2 recoilDirection = -GetComponent<SpellManager>().castPoint.right;
+        Vector2 recoilDirection = -GetComponent<SkillManager>().castPoint.right;
         rb.AddForce(recoilDirection * recoilAmount);
     }
 }

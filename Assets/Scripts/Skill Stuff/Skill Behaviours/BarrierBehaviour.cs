@@ -7,7 +7,7 @@ using UnityEngine.Rendering;
 
 public class BarrierBehaviour : MonoBehaviour {
 
-    public BarrierSpellData spellData;
+    public BarrierSkillData skillData;
     private float lifetime;
     private System.Action onDestroy;
     private HealthManager healthManager;

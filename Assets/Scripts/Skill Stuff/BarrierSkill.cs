@@ -2,74 +2,74 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BarrierSpell : Spell {
+public class BarrierSkill : Skill {
 
     private static GameObject currentBarrier;
     private bool isRepressed = false;
 
     public override void CastPressed() {
-        var barrierSpell = spellData as BarrierSpellData;
-        if (barrierSpell == null) return;
+        var barrierSkill = skillData as BarrierSkillData;
+        if (barrierSkill == null) return;
 
         // Prevent casting if a non-hold barrier is already active
-        if (!CanCast(barrierSpell)) {
+        if (!CanCast(barrierSkill)) {
             Debug.Log("Attempted to cast a non-hold barrier when one is already active.");
             return;
         }
 
-        SetupBarrier(barrierSpell);
+        SetupBarrier(barrierSkill);
     }
 
     public override void CastHeld() {
-        var barrierSpell = spellData as BarrierSpellData;
-        if (barrierSpell == null  || !barrierSpell.requiresHold) return;
+        var barrierSkill = skillData as BarrierSkillData;
+        if (barrierSkill == null  || !barrierSkill.requiresHold) return;
 
         if (currentBarrier == null) {
-            SetupBarrier(barrierSpell);
+            SetupBarrier(barrierSkill);
         }
     }
 
     public override void CastReleased() {
-        var barrierSpell = spellData as BarrierSpellData;
-        if (barrierSpell == null || !barrierSpell.requiresHold) return;
+        var barrierSkill = skillData as BarrierSkillData;
+        if (barrierSkill == null || !barrierSkill.requiresHold) return;
 
         DestroyCurrentBarrier();
     }
 
-    private void SetupBarrier(BarrierSpellData barrierSpell) {
+    private void SetupBarrier(BarrierSkillData barrierSkill) {
         if (TryToCast()) {
-            CreateBarrier(barrierSpell);
-            if (barrierSpell.drainsMana) {
+            CreateBarrier(barrierSkill);
+            if (barrierSkill.drainsMana) {
                 StartManaDrain();
             }
         }
     }
 
-    private void CreateBarrier(BarrierSpellData barrierSpell) {
+    private void CreateBarrier(BarrierSkillData barrierSkill) {
 
-        if (currentBarrier != null && !barrierSpell.isStationary) {
+        if (currentBarrier != null && !barrierSkill.isStationary) {
             Debug.Log("Non-stationary barrier already active, cannot create another.");
             return;
         }
 
-        Transform barrierPlacement = barrierSpell.centersOnCaster ? manaManager.transform : castPoint;
-        currentBarrier = Instantiate(barrierSpell.barrierPrefab, barrierPlacement.position, Quaternion.identity);
+        Transform barrierPlacement = barrierSkill.centersOnCaster ? manaManager.transform : castPoint;
+        currentBarrier = Instantiate(barrierSkill.barrierPrefab, barrierPlacement.position, Quaternion.identity);
 
-        SetupBarrierTransform(currentBarrier.transform, barrierSpell);
-        SetupBarrierProperties(currentBarrier, barrierSpell);
+        SetupBarrierTransform(currentBarrier.transform, barrierSkill);
+        SetupBarrierProperties(currentBarrier, barrierSkill);
     }
 
-    private Transform DetermineBarrierPlacement(BarrierSpellData barrierSpell) {
-        return barrierSpell.centersOnCaster ? manaManager.transform : castPoint;
+    private Transform DetermineBarrierPlacement(BarrierSkillData barrierSkill) {
+        return barrierSkill.centersOnCaster ? manaManager.transform : castPoint;
     }
 
-    private void SetupBarrierProperties(GameObject barrier, BarrierSpellData barrierSpell) {
+    private void SetupBarrierProperties(GameObject barrier, BarrierSkillData barrierSkill) {
         BarrierBehaviour behaviour = barrier.AddComponent<BarrierBehaviour>();
         behaviour.Initialize(
-            barrierSpell.barrierDuration,
+            barrierSkill.barrierDuration,
             () => BarrierDestroyed(barrier),
-            barrierSpell.isBreakable,
-            barrierSpell.barrierHealth);
+            barrierSkill.isBreakable,
+            barrierSkill.barrierHealth);
     }
 
     private void AssignBarrierLayer(Transform barrierTransform) {
@@ -84,12 +84,12 @@ public class BarrierSpell : Spell {
         }
     }
 
-    private void SetupBarrierTransform(Transform barrierTransform, BarrierSpellData barrierSpell) {
+    private void SetupBarrierTransform(Transform barrierTransform, BarrierSkillData barrierSkill) {
         float casterFacingDirection = castPoint.parent.localScale.x; // Positive for facing right, negative for left
         barrierTransform.localScale = new Vector3(Mathf.Sign(casterFacingDirection), 1, 1);
 
-        if (!barrierSpell.isStationary) {
-            barrierTransform.SetParent(DetermineBarrierPlacement(barrierSpell));
+        if (!barrierSkill.isStationary) {
+            barrierTransform.SetParent(DetermineBarrierPlacement(barrierSkill));
         }
         AssignBarrierLayer(barrierTransform);
 
@@ -113,15 +113,15 @@ public class BarrierSpell : Spell {
             Debug.Log("Barrier destroyed due to condition.");
         }
 
-        if (spellData.requiresConcentration) {
-            manaManager.GetComponent<SpellManager>().IsConcentrating = false;
+        if (skillData.requiresConcentration) {
+            manaManager.GetComponent<SkillManager>().IsConcentrating = false;
         }
 
         Destroy(barrier);
     }
 
-    private bool CanCast(BarrierSpellData barrierSpell) {
+    private bool CanCast(BarrierSkillData barrierSkill) {
         // Prevent casting if a non-hold barrier is active and requires exclusive control
-        return barrierSpell.requiresHold || currentBarrier == null;
+        return barrierSkill.requiresHold || currentBarrier == null;
     }
 }

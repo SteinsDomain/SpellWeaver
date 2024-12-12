@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Cinemachine;
 using UnityEngine;
 
-public class ProjectileSpell : Spell {
+public class ProjectileSkill : Skill {
 
     private GameObject currentDetonatableProjectile;
 
@@ -11,84 +11,84 @@ public class ProjectileSpell : Spell {
     }
 
     public override void CastPressed() {
-        var projectileSpell = spellData as ProjectileSpellData;
-        if (projectileSpell == null) return;
+        var projectileSkill = skillData as ProjectileSkillData;
+        if (projectileSkill == null) return;
 
-        if (projectileSpell.isDetonatable && currentDetonatableProjectile != null) {
+        if (projectileSkill.isDetonatable && currentDetonatableProjectile != null) {
             Debug.Log("Detonating existing projectile.");
             DetonateProjectile();
         }
         else if (TryToCast()) {
             Debug.Log("Casting new projectile.");
-            FireProjectiles(projectileSpell);
-            AudioSource.PlayClipAtPoint(projectileSpell.castSound, Vector3.zero);
-            Instantiate(spellData.castEffect, castPoint.position, Quaternion.identity, castPoint);
+            FireProjectiles(projectileSkill);
+            AudioSource.PlayClipAtPoint(projectileSkill.castSound, Vector3.zero);
+            Instantiate(skillData.castEffect, castPoint.position, Quaternion.identity, castPoint);
         }
     }
 
     public override void CastHeld() {
-        var projectileSpell = spellData as ProjectileSpellData;
-        if (projectileSpell == null) return;
+        var projectileSkill = skillData as ProjectileSkillData;
+        if (projectileSkill == null) return;
 
-        if (projectileSpell.shotType == ProjectileSpellData.ShotType.Auto && TryToCast()) {
+        if (projectileSkill.shotType == ProjectileSkillData.ShotType.Auto && TryToCast()) {
             Debug.Log("Continuously casting projectile.");
-            FireProjectiles(projectileSpell);
-            AudioSource.PlayClipAtPoint(projectileSpell.castSound, Vector3.zero);
-            Instantiate(spellData.castEffect, castPoint.position, Quaternion.identity, castPoint);
+            FireProjectiles(projectileSkill);
+            AudioSource.PlayClipAtPoint(projectileSkill.castSound, Vector3.zero);
+            Instantiate(skillData.castEffect, castPoint.position, Quaternion.identity, castPoint);
         }
     }
 
     public override void CastReleased() {
-        if (spellData.requiresConcentration) {
-            manaManager.GetComponent<SpellManager>().IsConcentrating = false;
+        if (skillData.requiresConcentration) {
+            manaManager.GetComponent<SkillManager>().IsConcentrating = false;
         }
     }
 
-    private void FireProjectiles(ProjectileSpellData projectileSpell) {
-        if (projectileSpell.shotsPerCast == 1)
+    private void FireProjectiles(ProjectileSkillData projectileSkill) {
+        if (projectileSkill.shotsPerCast == 1)
         {
             // If there's only one projectile, no need to calculate spread.
             Vector3 direction = castPoint.up;
-            float randomAngle = Random.Range(-projectileSpell.projectileAccuracy, projectileSpell.projectileAccuracy);
+            float randomAngle = Random.Range(-projectileSkill.projectileAccuracy, projectileSkill.projectileAccuracy);
             direction = Quaternion.Euler(0, 0, randomAngle) * direction;
-            FireProjectile(projectileSpell, castPoint.position, direction);
+            FireProjectile(projectileSkill, castPoint.position, direction);
             
         }
         else
         {
-            float totalSpread = projectileSpell.maxSpread;
-            float spreadIncrement = projectileSpell.shotsPerCast > 1 ? totalSpread / (projectileSpell.shotsPerCast - 1) : 0;
+            float totalSpread = projectileSkill.maxSpread;
+            float spreadIncrement = projectileSkill.shotsPerCast > 1 ? totalSpread / (projectileSkill.shotsPerCast - 1) : 0;
             float halfSpread = totalSpread / 2;
 
-            for (int i = 0; i < projectileSpell.shotsPerCast; i++)
+            for (int i = 0; i < projectileSkill.shotsPerCast; i++)
             {
                 float baseOffset = -halfSpread + spreadIncrement * i;
 
 
-                if (projectileSpell.shotDirection == ProjectileSpellData.ShotDirection.Arc) {
-                    float randomAngle = Random.Range(-projectileSpell.projectileAccuracy, projectileSpell.projectileAccuracy);
+                if (projectileSkill.shotDirection == ProjectileSkillData.ShotDirection.Arc) {
+                    float randomAngle = Random.Range(-projectileSkill.projectileAccuracy, projectileSkill.projectileAccuracy);
                     float finalAngle = baseOffset + randomAngle;
                     Vector3 direction = Quaternion.Euler(0, 0, finalAngle) * castPoint.up;
-                    FireProjectile(projectileSpell, castPoint.position, direction);
+                    FireProjectile(projectileSkill, castPoint.position, direction);
                 }
                 else { // Straight path
                     Vector3 offset = castPoint.up * baseOffset;
                     Vector3 startPosition = castPoint.position + offset;
                     Vector3 direction = castPoint.up;
-                    float randomAngle = Random.Range(-projectileSpell.projectileAccuracy, projectileSpell.projectileAccuracy);
+                    float randomAngle = Random.Range(-projectileSkill.projectileAccuracy, projectileSkill.projectileAccuracy);
                     direction = Quaternion.Euler(0, 0, randomAngle) * direction;
 
-                    FireProjectile(projectileSpell, startPosition, direction);
+                    FireProjectile(projectileSkill, startPosition, direction);
                 }
             }
         }
     }
 
-    private void FireProjectile(ProjectileSpellData projectileSpell, Vector3 startPosition, Vector3 direction) {
-        GameObject projectile = Instantiate(projectileSpell.projectilePrefab, startPosition, Quaternion.identity);
+    private void FireProjectile(ProjectileSkillData projectileSkill, Vector3 startPosition, Vector3 direction) {
+        GameObject projectile = Instantiate(projectileSkill.projectilePrefab, startPosition, Quaternion.identity);
         projectile.transform.rotation = Quaternion.FromToRotation(Vector3.up, direction);
         float scale = castPoint.parent.transform.localRotation.eulerAngles.y == 180 ? -1 : 1;
-        projectile.transform.localScale = new Vector3(scale * projectileSpell.projectileSizeMod, projectileSpell.projectileSizeMod, 1);
+        projectile.transform.localScale = new Vector3(scale * projectileSkill.projectileSizeMod, projectileSkill.projectileSizeMod, 1);
 
         //var caster = castPoint.parent;
 
@@ -97,7 +97,7 @@ public class ProjectileSpell : Spell {
                 projectile.layer = LayerMask.NameToLayer("Player Projectiles");
 
                 //Screen Shake for player only 
-                CinemachineShake.Instance.ShakeCamera(projectileSpell.screenShakeAmount, .1f);
+                CinemachineShake.Instance.ShakeCamera(projectileSkill.screenShakeAmount, .1f);
 
                 Debug.Log("Assigned to Player Projectiles layer.");
             }
@@ -115,21 +115,21 @@ public class ProjectileSpell : Spell {
         if (movementManager != null) {
             Debug.Log("Applying recoil to " + movementManager.name);
 
-            movementManager.ApplyRecoil(projectileSpell.projectileRecoil);
+            movementManager.ApplyRecoil(projectileSkill.projectileRecoil);
         }
 
         var behaviour = projectile.AddComponent<ProjectileBehaviour>();
-        behaviour.spellData = projectileSpell;
+        behaviour.skillData = projectileSkill;
         behaviour.castPoint = castPoint;
         behaviour.SetOriginLayer(castPoint.parent.gameObject.layer);
 
-        if (projectileSpell.isDetonatable) {
+        if (projectileSkill.isDetonatable) {
             currentDetonatableProjectile = projectile;
             Debug.Log("Set new detonatable projectile.");
         }
-        if (projectileSpell.isExplosive) {
+        if (projectileSkill.isExplosive) {
             Debug.Log("Initiating explosion sequence.");
-            behaviour.InitiateExplosionCountdown(projectileSpell.explosionDelay);
+            behaviour.InitiateExplosionCountdown(projectileSkill.explosionDelay);
         }
     }
 

@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class SpellData : ScriptableObject{
+public abstract class SkillData : ScriptableObject{
 
     [Header("Basic Spell Properties")]
     public string spellName;

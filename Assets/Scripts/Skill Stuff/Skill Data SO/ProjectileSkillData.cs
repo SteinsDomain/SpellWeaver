@@ -3,8 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "ProjectileSpell", menuName = "Scriptable Objects/Spells/ProjectileSpell")]
-public class ProjectileSpellData : SpellData {
+[CreateAssetMenu(fileName = "ProjectileSkill", menuName = "Scriptable Objects/Skills/ProjectileSkill")]
+public class ProjectileSkillData : SkillData {
 
 
     public enum ShotType {

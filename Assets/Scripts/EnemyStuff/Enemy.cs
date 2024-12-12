@@ -9,7 +9,7 @@ public class Enemy : MonoBehaviour
 {
     //Private Managers found on Awake 
     private HealthManager healthManager;
-    public SpellManager spellManager;
+    public SkillManager skillManager;
     private MovementManager movementManager;
     private CollisionManager collisionManager;
 
@@ -53,7 +53,7 @@ public class Enemy : MonoBehaviour
             healthManager.OnHealthDepleted += HandleDeath;
         }
         TryGetComponent<CollisionManager>(out collisionManager);
-        TryGetComponent<SpellManager>(out spellManager); 
+        TryGetComponent<SkillManager>(out skillManager); 
         TryGetComponent<MovementManager>(out movementManager);
 
         initialPosition = transform.position;

@@ -6,7 +6,7 @@ using static UnityEngine.UI.Image;
 
 public class ProjectileBehaviour : MonoBehaviour {
 
-    public ProjectileSpellData spellData;
+    public ProjectileSkillData skillData;
     private Vector3 startPosition;
     private int originLayer;
     private CollisionManager collisionManager;
@@ -28,7 +28,7 @@ public class ProjectileBehaviour : MonoBehaviour {
     }
 
     private void HandleMovement() {
-        float moveSpeed = spellData.projectileSpeed * Time.deltaTime * (transform.localScale.x > 0 ? 1 : -1);
+        float moveSpeed = skillData.projectileSpeed * Time.deltaTime * (transform.localScale.x > 0 ? 1 : -1);
         Vector2 moveDirection = transform.right * moveSpeed;
         HandleCollision(moveDirection);
     }
@@ -55,14 +55,14 @@ public class ProjectileBehaviour : MonoBehaviour {
 
     private void OnCollision(Collider2D collision)
     {
-        if (spellData.isExplosive)
+        if (skillData.isExplosive)
         {
             Explode();
             return;
         }
 
-        if (spellData.hitEffect != null) {
-            Instantiate(spellData.hitEffect, transform.position, Quaternion.identity);
+        if (skillData.hitEffect != null) {
+            Instantiate(skillData.hitEffect, transform.position, Quaternion.identity);
             Debug.Log("ProjectileBehaviour: Hit effect instantiated.");
         }
 
@@ -72,10 +72,10 @@ public class ProjectileBehaviour : MonoBehaviour {
             HealthManager healthManager = collision.gameObject.GetComponent<HealthManager>();
             if (healthManager != null)
             {
-                healthManager.TakeDamage(spellData.projectileDamage, spellData.hitStunScale, spellData.hitStunDuration);
+                healthManager.TakeDamage(skillData.projectileDamage, skillData.hitStunScale, skillData.hitStunDuration);
                 Vector2 knockbackDirection = (collision.transform.position - transform.position).normalized;
-                ApplyProjectileKnockback(collision.transform, spellData.projectileKnockback, knockbackDirection);
-                Debug.Log("ProjectileBehaviour: Applied " + spellData.projectileDamage + " damage and knockback to " + collision.gameObject.name);
+                ApplyProjectileKnockback(collision.transform, skillData.projectileKnockback, knockbackDirection);
+                Debug.Log("ProjectileBehaviour: Applied " + skillData.projectileDamage + " damage and knockback to " + collision.gameObject.name);
             }
 
             Destroy(gameObject);
@@ -84,7 +84,7 @@ public class ProjectileBehaviour : MonoBehaviour {
     }
 
     private void CheckOutOfRange() {
-        if (TravelDistance > spellData.maxProjectileRange) {
+        if (TravelDistance > skillData.maxProjectileRange) {
             Debug.Log("ProjectileBehaviour: Projectile exceeded max range. Destroying.");
             Destroy(gameObject);
         }
@@ -101,23 +101,23 @@ public class ProjectileBehaviour : MonoBehaviour {
     public void Explode() {
         Debug.Log("ProjectileBehaviour: Explosion triggered.");
         DoAreaDamage();
-        if (spellData.explosionPrefab != null) {
-            Instantiate(spellData.explosionPrefab, transform.position, Quaternion.identity);
+        if (skillData.explosionPrefab != null) {
+            Instantiate(skillData.explosionPrefab, transform.position, Quaternion.identity);
             Debug.Log("ProjectileBehaviour: Explosion effect instantiated.");
         }
         Destroy(gameObject);
     }
     private void DoAreaDamage() {
-        Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, spellData.explosionSize);
+        Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, skillData.explosionSize);
         Debug.Log($"ProjectileBehaviour: Checking area damage for {hits.Length} potential targets.");
         foreach (var hit in hits) {
             if (ShouldAffectTarget(hit.gameObject)) {
                 Debug.Log($"ProjectileBehaviour: Target {hit.gameObject.name} affected by explosion.");
                 HealthManager healthManager = hit.GetComponent<HealthManager>();
                 if (healthManager != null) {
-                    healthManager.TakeDamage(spellData.explosionDamage, spellData.hitStunScale, spellData.hitStunDuration); Vector2 knockbackDirection = (hit.transform.position - transform.position).normalized;
-                    ApplyExplosionKnockback(hit.transform, spellData.explosionKnockbackForce, knockbackDirection);
-                    Debug.Log($"ProjectileBehaviour: Applied {spellData.explosionDamage} damage and knockback to {hit.gameObject.name}.");
+                    healthManager.TakeDamage(skillData.explosionDamage, skillData.hitStunScale, skillData.hitStunDuration); Vector2 knockbackDirection = (hit.transform.position - transform.position).normalized;
+                    ApplyExplosionKnockback(hit.transform, skillData.explosionKnockbackForce, knockbackDirection);
+                    Debug.Log($"ProjectileBehaviour: Applied {skillData.explosionDamage} damage and knockback to {hit.gameObject.name}.");
                 }
             }
         }
@@ -144,6 +144,6 @@ public class ProjectileBehaviour : MonoBehaviour {
         Gizmos.color = Color.red;
 
         // Draw a wire sphere at the transform's position with radius equal to the explosionSize
-        Gizmos.DrawWireSphere(transform.position, spellData.explosionSize);
+        Gizmos.DrawWireSphere(transform.position, skillData.explosionSize);
     }
 }

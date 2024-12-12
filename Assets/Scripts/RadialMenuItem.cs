@@ -10,8 +10,8 @@ public class RadialMenuItem : MonoBehaviour
     public Color highlightColor = Color.yellow;
 
     // Properties to associate with specific elements or schools
-    public SpellManager.Element AssociatedElement { get; set; }
-    public SpellManager.School AssociatedSchool { get; set; }
+    public SkillManager.Element AssociatedElement { get; set; }
+    public SkillManager.School AssociatedSchool { get; set; }
 
     // Method to set this item as highlighted.
     public void SetHighlighted(bool highlighted) {

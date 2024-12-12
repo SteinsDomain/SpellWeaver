@@ -607,16 +607,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9f921da1e6d2c04bb9a41f0397f98d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  skillManager: {fileID: 2469503775417507381}
   stats: {fileID: 11400000, guid: 045d0f37c9cf56e4b9fc4313b70e07bd, type: 2}
-  isFacingRight: 1
-  isGrounded: 0
-  shouldMove: 1
   attackRange: 7
   chaseRange: 10
   attackCooldown: 0.5
   idlePauseDuration: 2
   wanderRange: 4
   safeDistance: 2
+  isFacingRight: 1
+  shouldMove: 1
+  isGrounded: 0
+  moveDirection: {x: 0, y: 0}
+  horizontalSpeed: 0
+  verticalSpeed: 0
+  smoothTime: 0
+  lastAttackTime: 0
+  wanderTarget: {x: 0, y: 0, z: 0}
+  isMovingToTarget: 0
+  idleEndTime: 0
+  initialPosition: {x: 0, y: 0, z: 0}
+  player: {fileID: 0}
+  currentState: {fileID: 0}
+  idleState: {fileID: 11400000, guid: 436669f6404e81341b9afd00b202e0bb, type: 2}
+  wanderState: {fileID: 11400000, guid: 39e0779f110574341af362f49a0d1a5e, type: 2}
+  chaseState: {fileID: 11400000, guid: 6a77fc4a74632364b82cf47ebe6ebe64, type: 2}
+  attackState: {fileID: 11400000, guid: 6b667bab6b3e5514582702664126351a, type: 2}
 --- !u!114 &2469503775417507381
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -626,17 +642,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 7942765370779737541}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6b69d6da82925824983035262214d809, type: 3}
+  m_Script: {fileID: 11500000, guid: 5a59a749e28853b43a8bbb43541e202d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   castPoint: {fileID: 2612679237092701663}
-  standardSpellCombinations: {fileID: 11400000, guid: 67b61c9f77eca8049849a0cf6455270a, type: 2}
-  customSpellCombinations: []
+  standardSkillCombinations: {fileID: 11400000, guid: 2fd03375025d55042a903118f53b2db2, type: 2}
+  customSkillCombinations: []
   elementEffects: []
   schoolEffects: []
-  currentSpellInstance: {fileID: 0}
-  availableElements: 00000000
-  availableSchools: 00000000
+  currentSkillInstance: {fileID: 0}
+  availableElements: 
+  availableSchools: 
   currentElement: 0
   currentSchool: 0
 --- !u!114 &9169413528601025964

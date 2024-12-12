@@ -5,20 +5,20 @@ using UnityEngine;
 using System.Linq;  // Add this line to use LINQ methods like Select
 using static UnityEditor.PlayerSettings;
 using static UnityEngine.UI.Image;
-using static ProjectileSpellData;
+using static ProjectileSkillData;
 using System.Threading;
 
-public class SpellManager : MonoBehaviour {
+public class SkillManager : MonoBehaviour {
 
     public Transform castPoint;
     private ManaManager manaManager;
 
-    [SerializeField] private StandardSpellCombosSO standardSpellCombinations;  // Reference to the standard spell combinations
-    [SerializeField] private List<SpellCombinations> customSpellCombinations;
+    [SerializeField] private StandardSkillCombosSO standardSkillCombinations;  // Reference to the standard spell combinations
+    [SerializeField] private List<SkillCombinations> customSkillCombinations;
     [SerializeField] private List<ElementEffectMapping> elementEffects;
     [SerializeField] private List<SchoolEffectMapping> schoolEffects;
-    public Dictionary<(Element, School), Spell> spellInstances;
-    public Spell currentSpellInstance;
+    public Dictionary<(Element, School), Skill> skillInstances;
+    public Skill currentSkillInstance;
 
     public enum Element { Arcane, Fire, Ice, Thunder, Earth, Water }
     public enum School { Projectile, Barrier }
@@ -36,53 +36,53 @@ public class SpellManager : MonoBehaviour {
     }
     
     void Awake() {
-        FindSpellcastingComponents();
+        FindSkillComponents();
         PopulateCustomCombinations();
-        InitializeSpellMap();
+        InitializeSkillMap();
         EnsureValidCurrentSelections();  // Ensure currentElement and currentSchool are valid to start
-        UpdateCurrentSpell();
+        UpdateCurrentSkill();
     }
-    private void FindSpellcastingComponents() {
+    private void FindSkillComponents() {
         castPoint = transform.Find("CastPoint");
         if (castPoint == null) {
-            Debug.LogError("SpellManager error: No child GameObject named 'Cast Point' found. Please ensure there is a GameObject named 'Cast Point' as a child of this component.");
+            Debug.LogError("SkillManager error: No child GameObject named 'Cast Point' found. Please ensure there is a GameObject named 'Cast Point' as a child of this component.");
         }
         TryGetComponent<ManaManager>(out manaManager);
         if (manaManager == null) {
-            Debug.LogError("SpellManager error: No ManaManager component found on this GameObject or any of its parents.");
+            Debug.LogError("SkillManager error: No ManaManager component found on this GameObject or any of its parents.");
         }
     }
 
-    #region Spell Switching for Player
+    #region Skill Switching for Player
     private void PopulateCustomCombinations() {
         // Create a dictionary for quick lookup of existing custom combinations
-        var customCombinationLookup = customSpellCombinations.ToDictionary(combo => (combo.element, combo.school));
+        var customCombinationLookup = customSkillCombinations.ToDictionary(combo => (combo.element, combo.school));
 
         // Iterate through the standard combinations
-        foreach (var standardCombo in standardSpellCombinations.spellCombinations) {
+        foreach (var standardCombo in standardSkillCombinations.skillCombinations) {
             var key = (standardCombo.element, standardCombo.school);
 
             // If the custom combinations do not already contain this standard combination, add it
             if (!customCombinationLookup.ContainsKey(key)) {
                 // Create a new instance of SpellCombinations to avoid referencing the same object
-                var newCombo = new SpellCombinations(standardCombo.element, standardCombo.school, standardCombo.spell);
-                customSpellCombinations.Add(newCombo);
+                var newCombo = new SkillCombinations(standardCombo.element, standardCombo.school, standardCombo.skill);
+                customSkillCombinations.Add(newCombo);
             }
         }
     }
-    private void InitializeSpellMap() {
+    private void InitializeSkillMap() {
 
         //Cleanup for old spells, mostly for testing in case changed in inspector
-        Spell[] existingSpells = castPoint.GetComponents<Spell>();
-        foreach (Spell spell in existingSpells) {
-            spellInstances.Clear();
-            Destroy(spell);
+        Skill[] existingSkills = castPoint.GetComponents<Skill>();
+        foreach (Skill skill in existingSkills) {
+            skillInstances.Clear();
+            Destroy(skill);
         }
-        spellInstances = new Dictionary<(Element, School), Spell>();
+        skillInstances = new Dictionary<(Element, School), Skill>();
 
-        foreach (var combo in customSpellCombinations) {
-            Spell spellInstance = Spell.CreateSpell(combo.spell, castPoint, manaManager);
-            spellInstances[(combo.element, combo.school)] = spellInstance;
+        foreach (var combo in customSkillCombinations) {
+            Skill skillInstance = Skill.CreateSkill(combo.skill, castPoint, manaManager);
+            skillInstances[(combo.element, combo.school)] = skillInstance;
         }
     }
     private void EnsureValidCurrentSelections() {
@@ -103,17 +103,17 @@ public class SpellManager : MonoBehaviour {
     }
     public void HandleElementSelect() {
         PopulateCustomCombinations(); //called again in case changed in inspector
-        InitializeSpellMap(); //called again in case changed in inspector
+        InitializeSkillMap(); //called again in case changed in inspector
 
         CycleElements();
-        UpdateCurrentSpell();
+        UpdateCurrentSkill();
     }
     public void HandleSchoolSelect() {
         PopulateCustomCombinations(); //called again in case changed in inspector
-        InitializeSpellMap(); //called again in case changed in inspector
+        InitializeSkillMap(); //called again in case changed in inspector
 
         CycleSchools();
-        UpdateCurrentSpell();
+        UpdateCurrentSkill();
     }
     private void CycleElements() {
         if (availableElements.Count == 0) return;
@@ -129,7 +129,7 @@ public class SpellManager : MonoBehaviour {
         for (int i = 1; i <= availableElements.Count; i++) {
             int newIndex = (originalIndex + i) % availableElements.Count;
             Element newElement = availableElements[newIndex];
-            if (customSpellCombinations.Any(sc => sc.element == newElement)) {
+            if (customSkillCombinations.Any(sc => sc.element == newElement)) {
                 if (currentElement != newElement) {
                     currentElement = newElement;
                     PlayElementEffect(currentElement);
@@ -153,7 +153,7 @@ public class SpellManager : MonoBehaviour {
         for (int i = 1; i <= availableSchools.Count; i++) {
             int newIndex = (originalIndex + i) % availableSchools.Count;
             School newSchool = availableSchools[newIndex];
-            if (customSpellCombinations.Any(sc => sc.school == newSchool)) {
+            if (customSkillCombinations.Any(sc => sc.school == newSchool)) {
                 if (currentSchool != newSchool) {
                     currentSchool = newSchool;
                     PlaySchoolEffect(currentSchool);
@@ -163,16 +163,16 @@ public class SpellManager : MonoBehaviour {
         }
         currentSchool = originalSchool;  // Reset to original if no valid combination is found
     }
-    private void UpdateCurrentSpell() {
+    private void UpdateCurrentSkill() {
         if (availableElements.Count == 0 || availableSchools.Count == 0) {
-            currentSpellInstance = null;
+            currentSkillInstance = null;
             return;
         }
-        if (spellInstances.TryGetValue((currentElement, currentSchool), out Spell spell)) {
-            currentSpellInstance = spell;
+        if (skillInstances.TryGetValue((currentElement, currentSchool), out Skill skill)) {
+            currentSkillInstance = skill;
         }
         else {
-            Debug.Log("No spell assigned for this element/form combination!");
+            Debug.Log("No skill assigned for this element/form combination!");
         }
     }
     private void PlayElementEffect(Element element) {
@@ -204,27 +204,27 @@ public class SpellManager : MonoBehaviour {
         if (!availableElements.Contains(newElementChoice)) {
             availableElements.Add(newElementChoice);
             currentElement = newElementChoice;
-            UpdateCurrentSpell();
+            UpdateCurrentSkill();
         }
     }
     public void AddAvailableSchool(School newSchoolChoice) {
         if (!availableSchools.Contains(newSchoolChoice)) {
             availableSchools.Add(newSchoolChoice);
             currentSchool = newSchoolChoice;
-            UpdateCurrentSpell();
+            UpdateCurrentSkill();
         }
     }
     #endregion
 
     #region Casting Methods
     public void CastPressed() {
-        currentSpellInstance?.CastPressed();
+        currentSkillInstance?.CastPressed();
     }
     public void CastHeld() {
-        currentSpellInstance?.CastHeld();
+        currentSkillInstance?.CastHeld();
     }
     public void CastReleased() {
-        currentSpellInstance?.CastReleased();
+        currentSkillInstance?.CastReleased();
     }
     #endregion
 }

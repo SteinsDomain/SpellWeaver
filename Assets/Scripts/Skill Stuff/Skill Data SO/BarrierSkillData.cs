@@ -5,11 +5,11 @@ using System.Threading;
 using UnityEngine;
 using UnityEngine.Rendering;
 
-[CreateAssetMenu(fileName = "BarrierSpell", menuName = "Scriptable Objects/Spells/BarrierSpell")]
+[CreateAssetMenu(fileName = "BarrierSkill", menuName = "Scriptable Objects/Skills/BarrierSkill")]
 
-public class BarrierSpellData : SpellData {
+public class BarrierSkillData : SkillData {
 
-    [Header("Barrier Spell Properties")]
+    [Header("Barrier Skill Properties")]
 
     public GameObject barrierPrefab;
 

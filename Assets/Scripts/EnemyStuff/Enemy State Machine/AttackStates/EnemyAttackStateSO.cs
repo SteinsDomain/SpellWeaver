@@ -23,7 +23,7 @@ public class EnemyAttackStateSO : EnemyBaseStateSO
 
         if (Time.time - enemy.lastAttackTime >= enemy.attackCooldown)
         {
-            enemy.spellManager.CastPressed();
+            enemy.skillManager.CastPressed();
             enemy.lastAttackTime = Time.time;
         }
     }
