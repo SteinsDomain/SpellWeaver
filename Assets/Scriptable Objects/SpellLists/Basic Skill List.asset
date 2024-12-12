@@ -12,4 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1f0f749d4072094da7cf039921a6dd2, type: 3}
   m_Name: Basic Skill List
   m_EditorClassIdentifier: 
-  skillCombinations: []
+  skillCombinations:
+  - element: 0
+    school: 0
+    skill: {fileID: 11400000, guid: cc28d09ea71517849b87bc34102c3c6d, type: 2}
+  - element: 1
+    school: 0
+    skill: {fileID: 11400000, guid: cc28d09ea71517849b87bc34102c3c6d, type: 2}

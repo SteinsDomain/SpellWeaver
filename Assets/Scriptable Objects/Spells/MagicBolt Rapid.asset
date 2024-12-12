@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0146f9a4d9f3a8444a00f3ddb27ccbe1, type: 3}
+  m_Script: {fileID: 11500000, guid: 5c696c062e05aa14987e16539a781d05, type: 3}
   m_Name: MagicBolt Rapid
   m_EditorClassIdentifier: 
   spellName: Magic Bolt Rapid
@@ -19,6 +19,8 @@ MonoBehaviour:
   castsPerSecond: 10
   requiresConcentration: 0
   canAim: 1
+  hitStunScale: 0
+  hitStunDuration: 0
   castSound: {fileID: 8300000, guid: 584af4cf30b03034fabca2aacb8db426, type: 3}
   castEffect: {fileID: 7342286864558875182, guid: da015dc90059e144380d699d45810215, type: 3}
   shotType: 1
@@ -26,6 +28,7 @@ MonoBehaviour:
   projectilePrefab: {fileID: 3082819435468633395, guid: 52f558099c29a35409fd78264902e86a, type: 3}
   explosionPrefab: {fileID: 0}
   hitEffect: {fileID: 7342286864558875182, guid: bfaf5e99cf87671448fbd08c4de83b45, type: 3}
+  projectileSizeMod: 1
   projectileSpeed: 100
   projectileKnockback: 0
   projectileRecoil: 0

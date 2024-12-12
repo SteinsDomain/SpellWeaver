@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0146f9a4d9f3a8444a00f3ddb27ccbe1, type: 3}
+  m_Script: {fileID: 11500000, guid: 5c696c062e05aa14987e16539a781d05, type: 3}
   m_Name: FireBolt
   m_EditorClassIdentifier: 
   spellName: Fire Bolt
@@ -19,10 +19,16 @@ MonoBehaviour:
   castsPerSecond: 1
   requiresConcentration: 0
   canAim: 0
+  hitStunScale: 0
+  hitStunDuration: 0
+  castSound: {fileID: 0}
+  castEffect: {fileID: 0}
   shotType: 0
+  shotDirection: 1
   projectilePrefab: {fileID: 1426571478921374127, guid: 7191d62005fb44b41b0785f04e1f7889, type: 3}
   explosionPrefab: {fileID: 3825735178010562562, guid: bde001ace8c736e48af4fd684d55bb19, type: 3}
   hitEffect: {fileID: 693620553653586790, guid: c523f3c5c54e48e448a672616c0c3db4, type: 3}
+  projectileSizeMod: 1
   projectileSpeed: 15
   projectileKnockback: 0
   projectileRecoil: 0
@@ -33,9 +39,11 @@ MonoBehaviour:
   explosionSize: 0.5
   explosionKnockbackForce: 0
   explosionDamage: 25
-  shotsPerBurst: 0
-  burstShotDelay: 0
   isDetonatable: 0
   chargeTime: 0
   minimumChargeNeeded: 0
   chargeBoostAmount: 0
+  shotsPerCast: 1
+  projectileAccuracy: 1
+  maxSpread: 30
+  screenShakeAmount: 0.5

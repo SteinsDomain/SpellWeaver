@@ -17,7 +17,7 @@ MonoBehaviour:
   maxMP: 2147483647
   mpRegenAmount: 0
   mpRegenRate: 1
-  groundSpeed: 10
+  groundSpeed: 3
   groundAccelerationTime: 0.1
   groundDecelerationTime: 0.1
   airSpeed: 0
