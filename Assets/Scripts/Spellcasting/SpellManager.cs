@@ -20,7 +20,7 @@ public class SpellManager : MonoBehaviour {
     public Dictionary<(Element, School), Spell> spellInstances;
     public Spell currentSpellInstance;
 
-    public enum Element { Arcane, Fire, Ice, Thunder, Earth }
+    public enum Element { Arcane, Fire, Ice, Thunder, Earth, Water }
     public enum School { Projectile, Barrier }
 
 
@@ -198,6 +198,7 @@ public class SpellManager : MonoBehaviour {
         effectTransform.localScale = new Vector3(casterFacingDirection, 1, 1);
     }
     #endregion
+
     #region Adding Elements and Schools
     public void AddAvailableElement(Element newElementChoice) {
         if (!availableElements.Contains(newElementChoice)) {
@@ -214,6 +215,7 @@ public class SpellManager : MonoBehaviour {
         }
     }
     #endregion
+
     #region Casting Methods
     public void CastPressed() {
         currentSpellInstance?.CastPressed();
