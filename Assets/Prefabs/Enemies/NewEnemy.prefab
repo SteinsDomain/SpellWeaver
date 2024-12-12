@@ -100,7 +100,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1844165535767977721
 Transform:
   m_ObjectHideFlags: 0
@@ -352,7 +352,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &2612679237092701663
 Transform:
   m_ObjectHideFlags: 0
@@ -470,7 +470,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4697272238558497218
 Transform:
   m_ObjectHideFlags: 0
@@ -554,6 +554,8 @@ GameObject:
   - component: {fileID: 4874229398613249319}
   - component: {fileID: 1507489699536811239}
   - component: {fileID: 2434205829997039175}
+  - component: {fileID: 1226763295044487371}
+  - component: {fileID: 3486224830774453801}
   m_Layer: 7
   m_Name: NewEnemy
   m_TagString: Enemy
@@ -651,8 +653,8 @@ MonoBehaviour:
   elementEffects: []
   schoolEffects: []
   currentSkillInstance: {fileID: 0}
-  availableElements: 
-  availableSchools: 
+  availableElements: 00000000
+  availableSchools: 00000000
   currentElement: 0
   currentSchool: 0
 --- !u!114 &9169413528601025964
@@ -758,3 +760,45 @@ MonoBehaviour:
   playerLayer:
     serializedVersion: 2
     m_Bits: 64
+--- !u!50 &1226763295044487371
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7942765370779737541}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 0.0001
+  m_LinearDrag: 0
+  m_AngularDrag: 0
+  m_GravityScale: 0
+  m_Material: {fileID: 6200000, guid: 0cf4175b9de791349b076e4995ace946, type: 2}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 1
+  m_Constraints: 4
+--- !u!114 &3486224830774453801
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7942765370779737541}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c965c147a7a8654d960558425236acb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stats: {fileID: 11400000, guid: 045d0f37c9cf56e4b9fc4313b70e07bd, type: 2}
+  isGrounded: 0
+  isFacingRight: 1

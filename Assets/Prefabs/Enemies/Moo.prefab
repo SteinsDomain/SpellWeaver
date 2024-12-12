@@ -131,6 +131,8 @@ GameObject:
   - component: {fileID: 2466697829099929558}
   - component: {fileID: 3381543040999027916}
   - component: {fileID: 4537010595959812062}
+  - component: {fileID: 5611591027518992995}
+  - component: {fileID: 7674932882878794806}
   m_Layer: 7
   m_Name: Moo
   m_TagString: Enemy
@@ -188,7 +190,7 @@ MonoBehaviour:
   chaseRange: 4.5
   attackCooldown: 0.5
   idlePauseDuration: 2
-  wanderRange: 4.5
+  wanderRange: 3
   safeDistance: 2
   isFacingRight: 1
   shouldMove: 1
@@ -204,10 +206,10 @@ MonoBehaviour:
   initialPosition: {x: 0, y: 0, z: 0}
   player: {fileID: 0}
   currentState: {fileID: 0}
-  idleState: {fileID: 0}
-  wanderState: {fileID: 0}
-  chaseState: {fileID: 0}
-  attackState: {fileID: 0}
+  idleState: {fileID: 11400000, guid: 436669f6404e81341b9afd00b202e0bb, type: 2}
+  wanderState: {fileID: 11400000, guid: 39e0779f110574341af362f49a0d1a5e, type: 2}
+  chaseState: {fileID: 11400000, guid: 6a77fc4a74632364b82cf47ebe6ebe64, type: 2}
+  attackState: {fileID: 11400000, guid: 6b667bab6b3e5514582702664126351a, type: 2}
 --- !u!114 &7891077282190862085
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -333,3 +335,45 @@ MonoBehaviour:
   playerLayer:
     serializedVersion: 2
     m_Bits: 64
+--- !u!114 &5611591027518992995
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2470154022824250476}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c965c147a7a8654d960558425236acb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stats: {fileID: 11400000, guid: 73841d1b47b20704d81b24a652de5ae2, type: 2}
+  isGrounded: 0
+  isFacingRight: 1
+--- !u!50 &7674932882878794806
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2470154022824250476}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 0.0001
+  m_LinearDrag: 0
+  m_AngularDrag: 0
+  m_GravityScale: 0
+  m_Material: {fileID: 6200000, guid: 0cf4175b9de791349b076e4995ace946, type: 2}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 1
+  m_Constraints: 4
